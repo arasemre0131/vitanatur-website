@@ -84,15 +84,26 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
 
     const stockNum = parseInt(stock, 10) || (isCreateMode ? 50 : 0);
     const thresholdNum = parseInt(lowStockThreshold, 10) || 5;
+    const newPrice = parseFloat(price) || 0;
+    const oldPrice = product?.price ?? 0;
+
+    // Sync variant prices: if main price changed, update variants whose price matched the old price
+    const syncedVariants = variants.map((v) => {
+      if (v.price === oldPrice && newPrice !== oldPrice) {
+        return { ...v, price: newPrice };
+      }
+      return v;
+    });
+
     const productData = {
       name,
       nameTr: nameTr || undefined,
       description,
       descriptionTr: descriptionTr || undefined,
-      price: parseFloat(price) || 0,
+      price: newPrice,
       category,
       images,
-      variants,
+      variants: syncedVariants,
       weight,
       origin,
       inStock: stockNum > 0,
