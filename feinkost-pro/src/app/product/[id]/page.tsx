@@ -21,10 +21,15 @@ export default function ProductDetailPage() {
   const addItem = useCartStore((s) => s.addItem);
   const openCart = useCartStore((s) => s.openCart);
 
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
-    product && product.variants.length > 0 ? product.variants[0] : null
+  const [selectedVariantId, setSelectedVariantId] = useState<string | null>(
+    product && product.variants.length > 0 ? product.variants[0].id : null
   );
   const [quantity, setQuantity] = useState(1);
+
+  // Derive variant from current product data so admin price changes are reflected
+  const selectedVariant = product
+    ? product.variants.find((v) => v.id === selectedVariantId) ?? (product.variants.length > 0 ? product.variants[0] : null)
+    : null;
 
   useEffect(() => {
     if (product) {
@@ -162,7 +167,7 @@ export default function ProductDetailPage() {
                   <button
                     key={v.id}
                     type="button"
-                    onClick={() => setSelectedVariant(v)}
+                    onClick={() => setSelectedVariantId(v.id)}
                     className={`px-4 py-2 text-sm rounded-full border transition-colors ${
                       selectedVariant?.id === v.id
                         ? "bg-olive-500 text-white border-olive-500"

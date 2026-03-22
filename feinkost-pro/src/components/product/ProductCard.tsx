@@ -12,13 +12,15 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
-    product.variants.length > 0 ? product.variants[0] : null
+  const [selectedVariantId, setSelectedVariantId] = useState<string | null>(
+    product.variants.length > 0 ? product.variants[0].id : null
   );
   const addItem = useCartStore((s) => s.addItem);
   const openCart = useCartStore((s) => s.openCart);
   const { t, lang } = useLang();
 
+  // Always derive variant from current product data so price updates are reflected
+  const selectedVariant = product.variants.find((v) => v.id === selectedVariantId) ?? (product.variants.length > 0 ? product.variants[0] : null);
   const currentPrice = selectedVariant ? selectedVariant.price : product.price;
 
   const isOutOfStock = product.stock === 0;
@@ -68,7 +70,7 @@ export function ProductCard({ product }: ProductCardProps) {
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    setSelectedVariant(v);
+                    setSelectedVariantId(v.id);
                   }}
                   className={`px-2.5 py-1 text-xs rounded-full border transition-colors ${
                     selectedVariant?.id === v.id
