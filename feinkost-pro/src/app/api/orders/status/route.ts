@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { validateSession } from "@/lib/auth";
 
 const VALID_STATUSES = ["pending", "confirmed", "preparing", "shipped", "delivered", "cancelled"];
-const ADMIN_API_KEY = process.env.ADMIN_PASSWORD || "admin123";
 
 function sanitizeString(value: unknown, maxLen = 255): string {
   if (typeof value !== "string") return "";
@@ -13,17 +13,9 @@ export async function PATCH(request: Request) {
   try {
     // Check for admin token in Authorization header
     const authHeader = request.headers.get("Authorization");
-    const token = authHeader?.replace("Bearer ", "");
+    const token = authHeader?.replace("Bearer ", "") || null;
 
-    if (!token) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
-
-    // Validate the token against the admin API key
-    if (token !== ADMIN_API_KEY) {
+    if (!validateSession(token)) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
         { status: 401 }
@@ -45,6 +37,27 @@ export async function PATCH(request: Request) {
       return NextResponse.json(
         { success: false, error: "Invalid status" },
         { status: 400 }
+      );
+    }
+
+    if (!supabase) {
+      return NextResponse.json(
+        { success: false, error: "Database not configured" },
+        { status: 503 }
+      );
+    }
+
+    // Verify the order exists before updating
+    const { data: existingOrder, error: fetchError } = await supabase
+      .from("orders")
+      .select("id")
+      .eq("id", orderId)
+      .single();
+
+    if (fetchError || !existingOrder) {
+      return NextResponse.json(
+        { success: false, error: "Order not found" },
+        { status: 404 }
       );
     }
 

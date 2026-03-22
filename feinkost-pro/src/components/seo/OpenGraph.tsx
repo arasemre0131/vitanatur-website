@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://feinkost.de";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://vitanatur.de";
 
 interface OGProps {
   title: string;
@@ -46,7 +46,7 @@ export function OpenGraphMeta({ title, description, image, url, type }: OGProps)
     setMeta("og:type", type || "website");
     setMeta("og:locale", "de_DE");
     setMeta("og:locale:alternate", "tr_TR");
-    setMeta("og:site_name", "Feinkost");
+    setMeta("og:site_name", "Vitanatur");
 
     // Twitter cards
     setMetaName("twitter:card", "summary_large_image");

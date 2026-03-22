@@ -32,7 +32,16 @@ interface AdminProductCardProps {
 export function AdminProductCard({ product, onEdit }: AdminProductCardProps) {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const deleteProduct = useAdminStore((s) => s.deleteProduct);
+  const updateProduct = useAdminStore((s) => s.updateProduct);
   const { lang, t } = useLang();
+
+  const handleToggleStock = () => {
+    const newInStock = !product.inStock;
+    updateProduct(product.id, {
+      inStock: newInStock,
+      stock: newInStock ? 50 : 0,
+    });
+  };
 
   const handleDelete = () => {
     if (confirmDelete) {
@@ -97,6 +106,20 @@ export function AdminProductCard({ product, onEdit }: AdminProductCardProps) {
             {product.price.toFixed(2).replace(".", ",")} &euro;
           </p>
         </div>
+
+        {/* Stock Toggle */}
+        <button
+          type="button"
+          onClick={handleToggleStock}
+          className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-cream-100 hover:bg-cream-200 transition-colors"
+        >
+          <span className={`text-xs font-semibold ${product.inStock ? "text-emerald-700" : "text-red-600"}`}>
+            {product.inStock ? t("admin.in_stock") : t("admin.out_of_stock")}
+          </span>
+          <div className={`relative w-10 h-5 rounded-full transition-colors ${product.inStock ? "bg-emerald-500" : "bg-red-400"}`}>
+            <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${product.inStock ? "left-[22px]" : "left-0.5"}`} />
+          </div>
+        </button>
 
         {/* Actions */}
         <div className="flex items-center gap-2 pt-2 border-t border-sand-100">

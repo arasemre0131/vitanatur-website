@@ -5,19 +5,15 @@ export default function ImpressumPage() {
       <div className="prose prose-espresso space-y-6 text-espresso-500">
         <section>
           <h2 className="font-serif text-xl text-espresso-600 mb-3">Angaben gemäß § 5 TMG</h2>
-          <p>[Firmenname]<br />[Vor- und Nachname des Inhabers]<br />[Straße und Hausnummer]<br />[PLZ Ort]<br />Deutschland</p>
+          <p>Vitanatur<br />Yasin Bey<br />Berlin<br />Deutschland</p>
         </section>
         <section>
           <h2 className="font-serif text-xl text-espresso-600 mb-3">Kontakt</h2>
-          <p>Telefon: [Telefonnummer]<br />E-Mail: [E-Mail-Adresse]</p>
-        </section>
-        <section>
-          <h2 className="font-serif text-xl text-espresso-600 mb-3">Umsatzsteuer-ID</h2>
-          <p>Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:<br />[USt-IdNr.]</p>
+          <p>E-Mail: info@vitanatur.de</p>
         </section>
         <section>
           <h2 className="font-serif text-xl text-espresso-600 mb-3">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
-          <p>[Vor- und Nachname]<br />[Adresse]</p>
+          <p>Yasin Bey<br />Berlin</p>
         </section>
         <section>
           <h2 className="font-serif text-xl text-espresso-600 mb-3">EU-Streitschlichtung</h2>

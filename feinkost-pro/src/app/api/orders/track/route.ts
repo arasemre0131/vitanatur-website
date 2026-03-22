@@ -32,6 +32,13 @@ export async function POST(request: Request) {
       );
     }
 
+    if (!supabase) {
+      return NextResponse.json(
+        { success: false, error: "Database not configured" },
+        { status: 503 }
+      );
+    }
+
     // Look up the order by ID and verify email
     const { data: order, error: orderError } = await supabase
       .from("orders")

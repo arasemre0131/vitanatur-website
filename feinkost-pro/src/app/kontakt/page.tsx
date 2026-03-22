@@ -12,8 +12,17 @@ export default function KontaktPage() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    try {
+      await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+    } catch {
+      // still show success - message may have been sent
+    }
     setSubmitted(true);
   }
 
@@ -120,7 +129,7 @@ export default function KontaktPage() {
                 <p className="font-medium text-espresso-600">
                   {t("kontakt.address")}
                 </p>
-                <p>Feinkost GmbH</p>
+                <p>Vitanatur</p>
                 <p>Musterstra&szlig;e 12</p>
                 <p>10115 Berlin</p>
               </div>
@@ -135,10 +144,10 @@ export default function KontaktPage() {
                   {t("kontakt.email")}
                 </p>
                 <a
-                  href="mailto:hallo@feinkost.de"
+                  href="mailto:info@vitanatur.de"
                   className="text-olive-500 hover:underline"
                 >
-                  hallo@feinkost.de
+                  info@vitanatur.de
                 </a>
               </div>
             </div>

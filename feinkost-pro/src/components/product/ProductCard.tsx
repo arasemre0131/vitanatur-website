@@ -56,7 +56,7 @@ export function ProductCard({ product }: ProductCardProps) {
           <h3 className="font-serif text-lg text-espresso-600 leading-snug">
             {lang === "tr" && product.nameTr ? product.nameTr : product.name}
           </h3>
-          <p className="text-sm text-sand-400 mt-0.5">{product.origin}</p>
+          <p className="text-sm text-sand-400 mt-0.5">{lang === "tr" && product.originTr ? product.originTr : product.origin}</p>
 
           {/* Variant selector */}
           {product.variants.length > 0 && (

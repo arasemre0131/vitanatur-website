@@ -72,6 +72,13 @@ export async function POST(request: Request) {
       );
     }
 
+    if (!supabase) {
+      return NextResponse.json(
+        { success: false, error: "Database not configured" },
+        { status: 503 }
+      );
+    }
+
     const orderId = `FK-${Date.now().toString(36).toUpperCase()}`;
 
     // Insert order

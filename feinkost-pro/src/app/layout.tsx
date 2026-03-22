@@ -11,7 +11,7 @@ import {
   LocalBusinessJsonLd,
 } from "@/components/seo/JsonLd";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://feinkost.de";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://vitanatur.de";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -22,13 +22,13 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "Feinkost — Türkische & Mediterrane Feinkost Online Kaufen",
-    template: "%s | Feinkost — Mediterrane Delikatessen",
+    default: "Vitanatur — Türkische & Mediterrane Feinkost Online Kaufen",
+    template: "%s | Vitanatur — Mediterrane Delikatessen",
   },
   description:
-    "Premium türkische und mediterrane Feinkost online bestellen. Handverlesene Gewürze, Trockenfrüchte, Nüsse, Olivenöl und orientalische Spezialitäten. Schneller Versand in ganz Deutschland.",
+    "Premium türkische und mediterrane Feinkost online bestellen bei Vitanatur. Handverlesene Gewürze, Trockenfrüchte, Nüsse, Olivenöl und orientalische Spezialitäten. Schneller Versand in ganz Deutschland.",
   keywords: [
-    "Feinkost",
+    "Vitanatur",
     "türkische Feinkost",
     "mediterrane Delikatessen",
     "türkische Gewürze",
@@ -44,21 +44,21 @@ export const metadata: Metadata = {
     "Nüsse online kaufen",
     "Kaşar Käse",
     "türkische Spezialitäten",
-    "Feinkost online Shop",
+    "Vitanatur online Shop",
   ],
   openGraph: {
-    title: "Feinkost — Türkische & Mediterrane Feinkost Online",
+    title: "Vitanatur — Türkische & Mediterrane Feinkost Online",
     description:
       "Handverlesene mediterrane und orientalische Delikatessen. Gewürze, Trockenfrüchte, Nüsse, Öle und Spezialitäten direkt aus dem Orient.",
     type: "website",
     locale: "de_DE",
     alternateLocale: "tr_TR",
-    siteName: "Feinkost",
+    siteName: "Vitanatur",
     url: BASE_URL,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Feinkost — Türkische & Mediterrane Feinkost Online",
+    title: "Vitanatur — Türkische & Mediterrane Feinkost Online",
     description:
       "Handverlesene mediterrane und orientalische Delikatessen. Gewürze, Trockenfrüchte, Nüsse, Öle und Spezialitäten.",
   },

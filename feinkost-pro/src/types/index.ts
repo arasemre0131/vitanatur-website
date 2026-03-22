@@ -10,6 +10,7 @@ export interface Product {
   variants: ProductVariant[];
   weight: string;
   origin: string;
+  originTr?: string;
   inStock: boolean;
   featured: boolean;
   stock: number;

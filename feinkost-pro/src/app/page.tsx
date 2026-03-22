@@ -16,23 +16,24 @@ export default function HomePage() {
   return (
     <>
       {/* SEO */}
-      <BreadcrumbJsonLd items={[{ name: "Startseite", url: "/" }]} />
+      <BreadcrumbJsonLd items={[{ name: t("nav.home"), url: "/" }]} />
       {/* ---- Hero ---- */}
-      <section className="relative bg-cream-100 overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.03]" style={{
-          backgroundImage: "radial-gradient(circle, currentColor 0.5px, transparent 0.5px)",
-          backgroundSize: "18px 18px",
-        }} />
+      <section className="relative overflow-hidden min-h-[420px] sm:min-h-[500px] lg:min-h-[600px] flex items-center justify-center">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/images/hero-bg.jpg')" }}
+        />
+        <div className="absolute inset-0 bg-espresso-700/50" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 lg:py-40 text-center">
-          <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-espresso-600 leading-tight tracking-tight">
-            {t("hero.title")}
+          <h1 className="font-serif text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-widest text-white leading-tight drop-shadow-lg">
+            VITANATUR
           </h1>
-          <p className="mt-4 text-lg sm:text-xl text-sand-400 max-w-xl mx-auto">
-            {t("hero.subtitle")}
+          <p className="mt-3 font-serif text-lg sm:text-xl lg:text-2xl text-cream-200 tracking-[0.2em] drop-shadow-md">
+            {t("hero.subtitle_brand")}
           </p>
           <Link
             href="#sortiment"
-            className="mt-8 inline-block px-8 py-3.5 rounded-lg bg-olive-500 text-white font-medium transition-colors hover:bg-olive-600 active:bg-olive-700 shadow-sm"
+            className="mt-10 inline-block px-10 py-4 rounded-lg bg-olive-500/90 text-white font-medium transition-all hover:bg-olive-600 active:bg-olive-700 shadow-lg hover:shadow-xl backdrop-blur-sm text-base"
           >
             {t("hero.cta")}
           </Link>

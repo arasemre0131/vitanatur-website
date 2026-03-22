@@ -7,8 +7,8 @@ import { useLang } from "@/lib/i18n";
 
 export function AdminSettings() {
   const { t } = useLang();
-  const [shopName, setShopName] = useState("Feinkost");
-  const [email, setEmail] = useState("info@feinkost-shop.de");
+  const [shopName, setShopName] = useState("Vitanatur");
+  const [email, setEmail] = useState("info@vitanatur.de");
   const [shippingThreshold, setShippingThreshold] = useState("49");
   const [currencyPosition, setCurrencyPosition] = useState<"after" | "before">(
     "after"
@@ -43,7 +43,7 @@ export function AdminSettings() {
               value={shopName}
               onChange={(e) => setShopName(e.target.value)}
               className={inputClass}
-              placeholder="Shop-Name"
+              placeholder="Mağaza adı"
             />
           </div>
 

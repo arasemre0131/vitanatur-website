@@ -30,7 +30,7 @@ export function Footer() {
           <div className="sm:col-span-2 lg:col-span-1">
             <Link href="/" className="inline-flex items-center gap-2 mb-4">
               <span className="font-serif text-lg font-semibold tracking-widest text-cream-100">
-                FEINKOST
+                VITANATUR
               </span>
               <span className="w-1.5 h-1.5 rounded-full bg-olive-400" />
             </Link>
@@ -83,15 +83,15 @@ export function Footer() {
               {t("footer.contact")}
             </h3>
             <address className="not-italic text-sm text-cream-300 space-y-2.5">
-              <p>Feinkost GmbH</p>
+              <p>Vitanatur</p>
               <p>Musterstraße 12</p>
               <p>10115 Berlin</p>
               <p className="pt-1">
                 <a
-                  href="mailto:hallo@feinkost.de"
+                  href="mailto:info@vitanatur.de"
                   className="hover:text-cream-100 transition-colors"
                 >
-                  hallo@feinkost.de
+                  info@vitanatur.de
                 </a>
               </p>
             </address>
@@ -102,7 +102,7 @@ export function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-espresso-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-cream-400">
-          <span>&copy; {new Date().getFullYear()} Feinkost. {t("footer.rights")}</span>
+          <span>&copy; {new Date().getFullYear()} Vitanatur. {t("footer.rights")}</span>
           <span>{t("footer.made_with")}</span>
         </div>
       </div>

@@ -29,7 +29,7 @@ export default function ProductDetailPage() {
   useEffect(() => {
     if (product) {
       const name = lang === "tr" && product.nameTr ? product.nameTr : product.name;
-      document.title = `${name} | Feinkost`;
+      document.title = `${name} | Vitanatur`;
 
       trackViewItem({
         id: product.id,
@@ -76,7 +76,7 @@ export default function ProductDetailPage() {
   const productDescription = lang === "tr" && product.descriptionTr ? product.descriptionTr : product.description;
 
   const breadcrumbItems = [
-    { name: "Startseite", url: "/" },
+    { name: t("nav.home"), url: "/" },
     ...(category
       ? [{ name: category.name, url: `/category/${category.slug}` }]
       : []),
@@ -121,7 +121,7 @@ export default function ProductDetailPage() {
           <h1 className="font-serif text-3xl sm:text-4xl text-espresso-600 leading-tight">
             {lang === "tr" && product.nameTr ? product.nameTr : product.name}
           </h1>
-          <p className="mt-1 text-sand-400">{product.origin}</p>
+          <p className="mt-1 text-sand-400">{lang === "tr" && product.originTr ? product.originTr : product.origin}</p>
 
           <p className="mt-6 text-espresso-500 leading-relaxed">
             {lang === "tr" && product.descriptionTr ? product.descriptionTr : product.description}
@@ -224,7 +224,7 @@ export default function ProductDetailPage() {
             <div className="flex items-center gap-2 text-sm">
               <span className="text-sand-400">{t("product.origin")}:</span>
               <span className="text-espresso-600 font-medium">
-                {product.origin}
+                {lang === "tr" && product.originTr ? product.originTr : product.origin}
               </span>
             </div>
             <div className="flex items-center gap-2 text-sm">

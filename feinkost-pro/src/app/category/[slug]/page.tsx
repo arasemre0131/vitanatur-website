@@ -19,7 +19,7 @@ export default function CategoryPage() {
   useEffect(() => {
     if (category) {
       const catNameKey = `cat.${category.slug}` as Parameters<typeof t>[0];
-      document.title = `${t(catNameKey)} | Feinkost`;
+      document.title = `${t(catNameKey)} | Vitanatur`;
     }
   }, [category, lang, t]);
 
@@ -45,12 +45,13 @@ export default function CategoryPage() {
   const catDescKey = `cat.${slug}.desc` as Parameters<typeof t>[0];
 
   return (
+    <div>
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
       {/* SEO */}
       <BreadcrumbJsonLd
         items={[
-          { name: "Startseite", url: "/" },
-          { name: category.name, url: `/category/${category.slug}` },
+          { name: t("nav.home"), url: "/" },
+          { name: t(`cat.${category.slug}` as Parameters<typeof t>[0]), url: `/category/${category.slug}` },
         ]}
       />
 
@@ -75,6 +76,7 @@ export default function CategoryPage() {
 
       {/* Product Grid */}
       <ProductGrid products={filtered} />
+    </div>
     </div>
   );
 }

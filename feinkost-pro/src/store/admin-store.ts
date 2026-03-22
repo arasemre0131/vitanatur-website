@@ -128,6 +128,7 @@ export const useAdminStore = create<AdminState>()(
     }),
     {
       name: "feinkost-admin",
+      version: 3,
       partialize: (state) => ({
         isAuthenticated: state.isAuthenticated,
         token: state.token,

@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { Product } from "@/types";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://feinkost.de";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://vitanatur.de";
 
 function useJsonLd(id: string, schema: Record<string, unknown>) {
   useEffect(() => {
@@ -26,11 +26,11 @@ export function OrganizationJsonLd() {
   useJsonLd("ld-organization", {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Feinkost",
+    name: "Vitanatur",
     url: BASE_URL,
     logo: `${BASE_URL}/logo.png`,
     description:
-      "Premium mediterrane und orientalische Feinkost. Handverlesene Gewürze, Trockenfrüchte, Öle und Spezialitäten.",
+      "Premium mediterrane und orientalische Feinkost von Vitanatur. Handverlesene Gewürze, Trockenfrüchte, Öle und Spezialitäten.",
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer service",
@@ -46,7 +46,7 @@ export function WebSiteJsonLd() {
   useJsonLd("ld-website", {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Feinkost",
+    name: "Vitanatur",
     url: BASE_URL,
     description:
       "Premium mediterrane und orientalische Feinkost. Handverlesene Gewürze, Trockenfrüchte, Öle und Spezialitäten direkt aus dem Orient.",
@@ -68,7 +68,7 @@ export function LocalBusinessJsonLd() {
   useJsonLd("ld-localbusiness", {
     "@context": "https://schema.org",
     "@type": "Store",
-    name: "Feinkost",
+    name: "Vitanatur",
     url: BASE_URL,
     image: `${BASE_URL}/logo.png`,
     description:
@@ -96,7 +96,7 @@ export function ProductJsonLd({ product }: { product: Product }) {
     sku: product.id,
     brand: {
       "@type": "Brand",
-      name: "Feinkost",
+      name: "Vitanatur",
     },
     category: product.category,
     offers: {
@@ -109,7 +109,7 @@ export function ProductJsonLd({ product }: { product: Product }) {
         : "https://schema.org/OutOfStock",
       seller: {
         "@type": "Organization",
-        name: "Feinkost",
+        name: "Vitanatur",
       },
       shippingDetails: {
         "@type": "OfferShippingDetails",

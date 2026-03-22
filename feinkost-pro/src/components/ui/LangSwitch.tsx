@@ -7,7 +7,6 @@ import { useState, useRef, useEffect } from "react";
 const languages: { code: Lang; flag: string; label: string }[] = [
   { code: "de", flag: "\u{1F1E9}\u{1F1EA}", label: "Deutsch" },
   { code: "tr", flag: "\u{1F1F9}\u{1F1F7}", label: "T\u00FCrk\u00E7e" },
-  { code: "en", flag: "\u{1F1EC}\u{1F1E7}", label: "English" },
 ];
 
 export function LangSwitch() {

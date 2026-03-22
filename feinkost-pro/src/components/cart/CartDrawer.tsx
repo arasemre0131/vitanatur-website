@@ -108,10 +108,11 @@ export function CartDrawer() {
                             updateQuantity(
                               item.product.id,
                               item.variant?.id ?? null,
-                              item.quantity + 1
+                              Math.min(item.product.stock, item.quantity + 1)
                             )
                           }
-                          className="w-7 h-7 flex items-center justify-center rounded-md border border-sand-200 text-espresso-400 hover:bg-sand-100 transition-colors"
+                          disabled={item.quantity >= item.product.stock}
+                          className="w-7 h-7 flex items-center justify-center rounded-md border border-sand-200 text-espresso-400 hover:bg-sand-100 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                         >
                           <Plus className="w-3 h-3" />
                         </button>

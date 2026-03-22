@@ -6,7 +6,7 @@ export default function AGBPage() {
 
         <section>
           <h2 className="font-serif text-xl text-espresso-600 mb-3">§ 1 Geltungsbereich</h2>
-          <p>Diese Allgemeinen Geschäftsbedingungen (AGB) gelten für alle Bestellungen, die über den Online-Shop von [FIRMENNAME] (nachfolgend &quot;Verkäufer&quot;) getätigt werden.</p>
+          <p>Diese Allgemeinen Geschäftsbedingungen (AGB) gelten für alle Bestellungen, die über den Online-Shop von Vitanatur (nachfolgend &quot;Verkäufer&quot;) getätigt werden.</p>
           <p className="mt-3">Vertragssprache ist Deutsch. Es gelten ausschließlich diese AGB. Abweichende Bedingungen des Kunden werden nicht anerkannt, es sei denn, der Verkäufer stimmt ihrer Geltung ausdrücklich schriftlich zu.</p>
           <p className="mt-3">Verbraucher im Sinne dieser AGB ist jede natürliche Person, die ein Rechtsgeschäft zu Zwecken abschließt, die überwiegend weder ihrer gewerblichen noch ihrer selbständigen beruflichen Tätigkeit zugerechnet werden können (§ 13 BGB).</p>
         </section>
@@ -51,7 +51,7 @@ export default function AGBPage() {
           <p><strong>Widerrufsbelehrung:</strong></p>
           <p className="mt-3">Sie haben das Recht, binnen vierzehn Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen. Die Widerrufsfrist beträgt vierzehn Tage ab dem Tag, an dem Sie oder ein von Ihnen benannter Dritter, der nicht der Beförderer ist, die Waren in Besitz genommen haben bzw. hat.</p>
           <p className="mt-3">Um Ihr Widerrufsrecht auszuüben, müssen Sie uns</p>
-          <p>[FIRMENNAME]<br />[ADRESSE]<br />E-Mail: [EMAIL]<br />Telefon: [TELEFONNUMMER]</p>
+          <p>Vitanatur<br />Berlin, Deutschland<br />E-Mail: info@vitanatur.de<br />Telefon: -</p>
           <p className="mt-3">mittels einer eindeutigen Erklärung (z.&nbsp;B. ein mit der Post versandter Brief oder E-Mail) über Ihren Entschluss, diesen Vertrag zu widerrufen, informieren.</p>
           <p className="mt-3"><strong>Folgen des Widerrufs:</strong></p>
           <p>Wenn Sie diesen Vertrag widerrufen, haben wir Ihnen alle Zahlungen, die wir von Ihnen erhalten haben, einschließlich der Lieferkosten (mit Ausnahme der zusätzlichen Kosten, die sich daraus ergeben, dass Sie eine andere Art der Lieferung als die von uns angebotene, günstigste Standardlieferung gewählt haben), unverzüglich und spätestens binnen vierzehn Tagen ab dem Tag zurückzuzahlen, an dem die Mitteilung über Ihren Widerruf dieses Vertrags bei uns eingegangen ist.</p>
@@ -88,7 +88,7 @@ export default function AGBPage() {
         </section>
 
         <section>
-          <p className="text-sm text-espresso-400 mt-8">Stand: [DATUM]</p>
+          <p className="text-sm text-espresso-400 mt-8">Stand: März 2026</p>
         </section>
       </div>
     </div>

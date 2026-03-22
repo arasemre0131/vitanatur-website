@@ -1,12 +1,21 @@
 import { NextResponse } from "next/server";
-
-const ADMIN_USER = process.env.ADMIN_USERNAME || "admin";
-const ADMIN_PASS = process.env.ADMIN_PASSWORD || "admin123";
-
-// Simple in-memory session (for production, use a proper session store)
-let activeSession: string | null = null;
+import {
+  attemptLogin,
+  clearSession,
+  isRateLimited,
+  getClientIp,
+} from "@/lib/auth";
 
 export async function POST(request: Request) {
+  const ip = getClientIp(request);
+
+  if (isRateLimited(ip)) {
+    return NextResponse.json(
+      { success: false, error: "Too many login attempts. Try again later." },
+      { status: 429 }
+    );
+  }
+
   const { username, password } = await request.json();
 
   if (!username || !password) {
@@ -16,10 +25,10 @@ export async function POST(request: Request) {
     );
   }
 
-  if (username === ADMIN_USER && password === ADMIN_PASS) {
-    // Use ADMIN_PASS as the token so it stays consistent across serverless invocations
-    activeSession = ADMIN_PASS;
-    return NextResponse.json({ success: true, token: ADMIN_PASS });
+  const token = attemptLogin(username, password);
+
+  if (token) {
+    return NextResponse.json({ success: true, token });
   }
 
   return NextResponse.json(
@@ -29,11 +38,6 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE() {
-  activeSession = null;
+  clearSession();
   return NextResponse.json({ success: true });
-}
-
-// Validate token - export for use by other API routes
-export function validateSession(token: string | null): boolean {
-  return token !== null && token === activeSession;
 }

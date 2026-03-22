@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Feinkost Admin",
+  title: "Vitanatur Admin",
 };
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

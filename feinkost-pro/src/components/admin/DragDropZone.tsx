@@ -105,7 +105,7 @@ export function DragDropZone({ images, onImagesChange }: DragDropZoneProps) {
             >
               <img
                 src={src}
-                alt={`Upload ${index + 1}`}
+                alt={`Yüklenen ${index + 1}`}
                 className="w-full h-full object-cover"
               />
               <button

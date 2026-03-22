@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
 
-function escapeText(value: unknown): string {
+function sanitizeString(value: unknown, maxLen = 500): string {
   if (typeof value !== "string") return "";
-  // Remove any characters that could be problematic in Telegram messages
-  return value.replace(/[<>&]/g, "").trim().slice(0, 500);
+  return value.replace(/[<>&"']/g, "").trim().slice(0, maxLen);
 }
 
 export async function POST(request: Request) {
@@ -30,10 +29,10 @@ export async function POST(request: Request) {
       );
     }
 
-    const safeOrderId = escapeText(orderId);
-    const safeFirstName = escapeText(customer?.firstName);
-    const safeLastName = escapeText(customer?.lastName);
-    const safeEmail = escapeText(customer?.email);
+    const safeOrderId = sanitizeString(orderId);
+    const safeFirstName = sanitizeString(customer?.firstName);
+    const safeLastName = sanitizeString(customer?.lastName);
+    const safeEmail = sanitizeString(customer?.email);
     const safeTotal = typeof total === "number" ? total.toFixed(2) : "0.00";
 
     let itemLines = "";
@@ -41,7 +40,7 @@ export async function POST(request: Request) {
       itemLines = items
         .slice(0, 50) // Limit number of items to prevent abuse
         .map((i: any) => {
-          const name = escapeText(i.name);
+          const name = sanitizeString(i.name);
           const qty = typeof i.quantity === "number" ? i.quantity : 0;
           const itemTotal = typeof i.total === "number" ? i.total.toFixed(2) : "0.00";
           return `- ${name} x${qty} = ${itemTotal}EUR`;

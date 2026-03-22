@@ -7,7 +7,7 @@ export default function DatenschutzPage() {
         <section>
           <h2 className="font-serif text-xl text-espresso-600 mb-3">1. Verantwortlicher</h2>
           <p>Verantwortlich für die Datenverarbeitung auf dieser Website ist:</p>
-          <p>[FIRMENNAME]<br />[ADRESSE]<br />E-Mail: [EMAIL]<br />Telefon: [TELEFONNUMMER]</p>
+          <p>Vitanatur<br />Berlin, Deutschland<br />E-Mail: info@vitanatur.de<br />Telefon: -</p>
         </section>
 
         <section>
@@ -70,7 +70,7 @@ export default function DatenschutzPage() {
           <h3 className="font-serif text-lg text-espresso-600 mt-4 mb-2">Recht auf Datenübertragbarkeit (Art. 20 DSGVO)</h3>
           <p>Sie haben das Recht, die Sie betreffenden personenbezogenen Daten in einem strukturierten, gängigen und maschinenlesbaren Format zu erhalten.</p>
 
-          <p className="mt-4">Zur Ausübung Ihrer Rechte wenden Sie sich bitte an: <a href="mailto:[EMAIL]" className="text-olive-500 hover:underline">[EMAIL]</a></p>
+          <p className="mt-4">Zur Ausübung Ihrer Rechte wenden Sie sich bitte an: <a href="mailto:info@vitanatur.de" className="text-olive-500 hover:underline">info@vitanatur.de</a></p>
         </section>
 
         <section>
@@ -90,11 +90,11 @@ export default function DatenschutzPage() {
         <section>
           <h2 className="font-serif text-xl text-espresso-600 mb-3">8. Kontakt</h2>
           <p>Bei Fragen zum Datenschutz erreichen Sie uns unter:</p>
-          <p>[FIRMENNAME]<br />[ADRESSE]<br />E-Mail: <a href="mailto:[EMAIL]" className="text-olive-500 hover:underline">[EMAIL]</a></p>
+          <p>Vitanatur<br />Berlin, Deutschland<br />E-Mail: <a href="mailto:info@vitanatur.de" className="text-olive-500 hover:underline">info@vitanatur.de</a></p>
         </section>
 
         <section>
-          <p className="text-sm text-espresso-400 mt-8">Stand: [DATUM]</p>
+          <p className="text-sm text-espresso-400 mt-8">Stand: März 2026</p>
         </section>
       </div>
     </div>

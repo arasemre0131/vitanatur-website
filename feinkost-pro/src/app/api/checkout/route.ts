@@ -1,5 +1,14 @@
 import { NextResponse } from "next/server";
 
+function sanitizeString(value: unknown, maxLen = 255): string {
+  if (typeof value !== "string") return "";
+  return value.replace(/[<>&"']/g, "").trim().slice(0, maxLen);
+}
+
+function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -21,9 +30,20 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!customer.firstName || !customer.lastName || !customer.email) {
+    const firstName = sanitizeString(customer.firstName, 100);
+    const lastName = sanitizeString(customer.lastName, 100);
+    const email = sanitizeString(customer.email, 255);
+
+    if (!firstName || !lastName) {
       return NextResponse.json(
-        { success: false, error: "Customer name and email are required" },
+        { success: false, error: "Customer first and last name are required" },
+        { status: 400 }
+      );
+    }
+
+    if (!email || !isValidEmail(email)) {
+      return NextResponse.json(
+        { success: false, error: "A valid email address is required" },
         { status: 400 }
       );
     }

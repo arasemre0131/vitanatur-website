@@ -174,7 +174,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="z.B. Sumak Gewürz"
+                  placeholder="ör. Sumak Baharatı"
                   className={inputClass}
                 />
               </div>
@@ -184,7 +184,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
                   type="text"
                   value={nameTr}
                   onChange={(e) => setNameTr(e.target.value)}
-                  placeholder="z.B. Sumak"
+                  placeholder="ör. Sumak"
                   className={inputClass}
                 />
               </div>
@@ -195,7 +195,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Produktbeschreibung auf Deutsch..."
+                placeholder="Almanca ürün açıklaması..."
                 rows={3}
                 className={[inputClass, "resize-none"].join(" ")}
               />
@@ -250,7 +250,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
                   type="text"
                   value={weight}
                   onChange={(e) => setWeight(e.target.value)}
-                  placeholder="z.B. 250g"
+                  placeholder="ör. 250g"
                   className={inputClass}
                 />
               </div>
@@ -261,7 +261,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
                   type="text"
                   value={origin}
                   onChange={(e) => setOrigin(e.target.value)}
-                  placeholder="z.B. Türkei"
+                  placeholder="ör. Türkiye"
                   className={inputClass}
                 />
               </div>
@@ -355,7 +355,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
                       onChange={(e) =>
                         updateVariant(index, "name", e.target.value)
                       }
-                      placeholder="Variante"
+                      placeholder="Varyant adı"
                       className={[inputClass, "py-2"].join(" ")}
                     />
                   </div>
@@ -425,7 +425,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
                     >
                       <img
                         src={src}
-                        alt={`Bild ${idx + 1}`}
+                        alt={`Görsel ${idx + 1}`}
                         className="w-full h-full object-cover"
                       />
                       <button

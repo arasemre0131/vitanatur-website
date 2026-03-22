@@ -47,7 +47,7 @@ export function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
             <span className="font-serif text-xl sm:text-2xl font-semibold tracking-widest text-espresso-600 group-hover:text-espresso-500 transition-colors">
-              FEINKOST
+              VITANATUR
             </span>
             <span className="w-1.5 h-1.5 rounded-full bg-olive-500 group-hover:bg-olive-400 transition-colors" />
           </Link>
