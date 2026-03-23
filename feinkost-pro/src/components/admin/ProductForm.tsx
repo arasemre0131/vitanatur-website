@@ -31,9 +31,13 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
 
   const [name, setName] = useState(product?.name ?? "");
   const [nameTr, setNameTr] = useState(product?.nameTr ?? "");
+  const [nameEn, setNameEn] = useState(product?.nameEn ?? "");
   const [description, setDescription] = useState(product?.description ?? "");
   const [descriptionTr, setDescriptionTr] = useState(
     product?.descriptionTr ?? ""
+  );
+  const [descriptionEn, setDescriptionEn] = useState(
+    product?.descriptionEn ?? ""
   );
   const [price, setPrice] = useState(product?.price.toString() ?? "0");
 
@@ -109,8 +113,10 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
     const productData = {
       name,
       nameTr: nameTr || undefined,
+      nameEn: nameEn || undefined,
       description,
       descriptionTr: descriptionTr || undefined,
+      descriptionEn: descriptionEn || undefined,
       price: newPrice,
       category,
       images,
@@ -188,7 +194,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
               {t("admin.product_details")}
             </h3>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               <div>
                 <label className={labelClass}>{t("admin.name_de")} *</label>
                 <input
@@ -207,6 +213,16 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
                   value={nameTr}
                   onChange={(e) => setNameTr(e.target.value)}
                   placeholder="ör. Sumak"
+                  className={inputClass}
+                />
+              </div>
+              <div>
+                <label className={labelClass}>Name (EN)</label>
+                <input
+                  type="text"
+                  value={nameEn}
+                  onChange={(e) => setNameEn(e.target.value)}
+                  placeholder="e.g. Sumac"
                   className={inputClass}
                 />
               </div>
@@ -229,6 +245,17 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
                 value={descriptionTr}
                 onChange={(e) => setDescriptionTr(e.target.value)}
                 placeholder="Ürün açıklaması Türkçe..."
+                rows={3}
+                className={[inputClass, "resize-none"].join(" ")}
+              />
+            </div>
+
+            <div>
+              <label className={labelClass}>Description (EN)</label>
+              <textarea
+                value={descriptionEn}
+                onChange={(e) => setDescriptionEn(e.target.value)}
+                placeholder="Product description in English..."
                 rows={3}
                 className={[inputClass, "resize-none"].join(" ")}
               />

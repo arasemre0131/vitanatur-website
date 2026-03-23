@@ -36,8 +36,10 @@ export async function PATCH(
 
     if (body.name !== undefined) productUpdate.name = body.name;
     if (body.nameTr !== undefined) productUpdate.name_tr = body.nameTr;
+    if (body.nameEn !== undefined) productUpdate.name_en = body.nameEn;
     if (body.description !== undefined) productUpdate.description = body.description;
     if (body.descriptionTr !== undefined) productUpdate.description_tr = body.descriptionTr;
+    if (body.descriptionEn !== undefined) productUpdate.description_en = body.descriptionEn;
     if (body.price !== undefined) productUpdate.price = body.price;
     if (body.category !== undefined) productUpdate.category = body.category;
     if (body.weight !== undefined) productUpdate.weight = body.weight;

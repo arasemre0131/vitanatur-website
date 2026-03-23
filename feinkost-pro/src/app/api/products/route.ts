@@ -10,8 +10,10 @@ interface ProductRow {
   id: string;
   name: string;
   name_tr: string | null;
+  name_en: string | null;
   description: string;
   description_tr: string | null;
+  description_en: string | null;
   price: number;
   category: string;
   weight: string;
@@ -48,8 +50,10 @@ function toProduct(
     id: row.id,
     name: row.name,
     nameTr: row.name_tr ?? undefined,
+    nameEn: row.name_en ?? undefined,
     description: row.description,
     descriptionTr: row.description_tr ?? undefined,
+    descriptionEn: row.description_en ?? undefined,
     price: Number(row.price),
     category: row.category as Product["category"],
     images: images
@@ -163,8 +167,10 @@ export async function POST(request: Request) {
         id: body.id,
         name: body.name,
         name_tr: body.nameTr ?? null,
+        name_en: body.nameEn ?? null,
         description: body.description,
         description_tr: body.descriptionTr ?? null,
+        description_en: body.descriptionEn ?? null,
         price: body.price,
         category: body.category,
         weight: body.weight,

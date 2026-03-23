@@ -55,9 +55,9 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Content */}
         <div className="p-4 flex flex-col flex-1">
           <h3 className="font-serif text-lg text-espresso-600 leading-snug">
-            {lang === "tr" && product.nameTr ? product.nameTr : product.name}
+            {lang === "tr" && product.nameTr ? product.nameTr : lang === "en" && product.nameEn ? product.nameEn : product.name}
           </h3>
-          <p className="text-sm text-sand-400 mt-0.5">{lang === "tr" && product.originTr ? product.originTr : product.origin}</p>
+          <p className="text-sm text-sand-400 mt-0.5">{lang === "tr" && product.originTr ? product.originTr : lang === "en" && product.originTr ? product.origin : product.origin}</p>
 
           {/* Variant selector */}
           {product.variants.length > 0 && (

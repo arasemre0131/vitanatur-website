@@ -33,7 +33,7 @@ export default function ProductDetailPage() {
 
   useEffect(() => {
     if (product) {
-      const name = lang === "tr" && product.nameTr ? product.nameTr : product.name;
+      const name = lang === "en" && product.nameEn ? product.nameEn : lang === "tr" && product.nameTr ? product.nameTr : product.name;
       document.title = `${name} | Vitanatur`;
 
       trackViewItem({
@@ -77,8 +77,8 @@ export default function ProductDetailPage() {
     setQuantity(1);
   }
 
-  const productName = lang === "tr" && product.nameTr ? product.nameTr : product.name;
-  const productDescription = lang === "tr" && product.descriptionTr ? product.descriptionTr : product.description;
+  const productName = lang === "en" && product.nameEn ? product.nameEn : lang === "tr" && product.nameTr ? product.nameTr : product.name;
+  const productDescription = lang === "en" && product.descriptionEn ? product.descriptionEn : lang === "tr" && product.descriptionTr ? product.descriptionTr : product.description;
 
   const breadcrumbItems = [
     { name: t("nav.home"), url: "/" },
@@ -111,7 +111,7 @@ export default function ProductDetailPage() {
             <span>/</span>
           </>
         )}
-        <span className="text-espresso-600">{lang === "tr" && product.nameTr ? product.nameTr : product.name}</span>
+        <span className="text-espresso-600">{productName}</span>
       </nav>
 
       {/* Main content */}
@@ -124,12 +124,12 @@ export default function ProductDetailPage() {
         {/* Right: Details */}
         <div className="flex flex-col">
           <h1 className="font-serif text-3xl sm:text-4xl text-espresso-600 leading-tight">
-            {lang === "tr" && product.nameTr ? product.nameTr : product.name}
+            {productName}
           </h1>
           <p className="mt-1 text-sand-400">{lang === "tr" && product.originTr ? product.originTr : product.origin}</p>
 
           <p className="mt-6 text-espresso-500 leading-relaxed">
-            {lang === "tr" && product.descriptionTr ? product.descriptionTr : product.description}
+            {productDescription}
           </p>
 
           {/* Price */}
