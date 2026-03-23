@@ -39,18 +39,6 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
   const [descriptionEn, setDescriptionEn] = useState(
     product?.descriptionEn ?? ""
   );
-  const [price, setPrice] = useState(product?.price.toString() ?? "0");
-
-  // Ana fiyat değişince ilk varyantın fiyatını da güncelle
-  const handlePriceChange = (newPrice: string) => {
-    setPrice(newPrice);
-    const num = parseFloat(newPrice);
-    if (!isNaN(num) && variants.length > 0) {
-      setVariants((prev) =>
-        prev.map((v, i) => (i === 0 ? { ...v, price: num } : v))
-      );
-    }
-  };
   const [category, setCategory] = useState<CategorySlug>(product?.category ?? "gewuerze");
   const [weight, setWeight] = useState(product?.weight ?? "");
   const [origin, setOrigin] = useState(product?.origin ?? "");
@@ -99,16 +87,9 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
 
     const stockNum = parseInt(stock, 10) || (isCreateMode ? 50 : 0);
     const thresholdNum = parseInt(lowStockThreshold, 10) || 5;
-    const newPrice = parseFloat(price) || 0;
-    const oldPrice = product?.price ?? 0;
 
-    // Sync variant prices: if main price changed, update variants whose price matched the old price
-    const syncedVariants = variants.map((v) => {
-      if (v.price === oldPrice && newPrice !== oldPrice) {
-        return { ...v, price: newPrice };
-      }
-      return v;
-    });
+    // Price comes from the first variant (no separate main price field)
+    const derivedPrice = variants.length > 0 ? variants[0].price : 0;
 
     const productData = {
       name,
@@ -117,10 +98,10 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
       description,
       descriptionTr: descriptionTr || undefined,
       descriptionEn: descriptionEn || undefined,
-      price: newPrice,
+      price: derivedPrice,
       category,
       images,
-      variants: syncedVariants,
+      variants,
       weight,
       origin,
       inStock: stockNum > 0,
@@ -261,21 +242,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
               />
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <div>
-                <label className={labelClass}>{t("admin.price")} *</label>
-                <input
-                  type="number"
-                  required
-                  step="0.01"
-                  min="0"
-                  value={price}
-                  onChange={(e) => handlePriceChange(e.target.value)}
-                  placeholder="0,00"
-                  className={inputClass}
-                />
-              </div>
-
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               <div>
                 <label className={labelClass}>{t("admin.category")} *</label>
                 <select

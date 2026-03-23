@@ -1,11 +1,12 @@
-import { randomBytes, timingSafeEqual } from "crypto";
+import { createHmac, timingSafeEqual } from "crypto";
 
 const ADMIN_USER = process.env.ADMIN_USERNAME || "";
 const ADMIN_PASS = process.env.ADMIN_PASSWORD || "";
 
-// In-memory session token. Acceptable for single-instance deployment.
-// For multi-instance/serverless, replace with Redis or DB-backed sessions.
-let activeSession: string | null = null;
+// Secret for HMAC token signing — derived from admin password + a salt
+const TOKEN_SECRET = ADMIN_PASS + "__feinkost_token_salt__";
+// Token validity: 7 days
+const TOKEN_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 
 // --- Rate limiter ---
 const LOGIN_MAX_ATTEMPTS = 5;
@@ -55,20 +56,42 @@ export function getClientIp(request: Request): string {
   );
 }
 
+/** Create a stateless HMAC-signed token: "timestamp.signature" */
+function createToken(): string {
+  const timestamp = Date.now().toString();
+  const sig = createHmac("sha256", TOKEN_SECRET).update(timestamp).digest("hex");
+  return `${timestamp}.${sig}`;
+}
+
 export function attemptLogin(username: string, password: string): string | null {
   if (safeCompare(username, ADMIN_USER) && safeCompare(password, ADMIN_PASS)) {
-    const token = randomBytes(32).toString("hex");
-    activeSession = token;
-    return token;
+    return createToken();
   }
   return null;
 }
 
 export function clearSession(): void {
-  activeSession = null;
+  // No-op for stateless tokens — token expires naturally
 }
 
+/** Validate a stateless HMAC token: check signature + expiry */
 export function validateSession(token: string | null): boolean {
-  if (!token || !activeSession) return false;
-  return safeCompare(token, activeSession);
+  if (!token) return false;
+
+  const dotIndex = token.indexOf(".");
+  if (dotIndex === -1) return false;
+
+  const timestamp = token.substring(0, dotIndex);
+  const signature = token.substring(dotIndex + 1);
+
+  // Verify HMAC signature
+  const expectedSig = createHmac("sha256", TOKEN_SECRET).update(timestamp).digest("hex");
+  if (!safeCompare(signature, expectedSig)) return false;
+
+  // Check expiry
+  const created = parseInt(timestamp, 10);
+  if (isNaN(created)) return false;
+  if (Date.now() - created > TOKEN_MAX_AGE_MS) return false;
+
+  return true;
 }

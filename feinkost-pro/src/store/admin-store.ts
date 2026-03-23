@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Product } from "@/types";
-import { products as initialProducts } from "@/data/products";
 
 interface AdminState {
   // Auth (persisted to localStorage)
@@ -11,6 +10,9 @@ interface AdminState {
   // Products (NOT persisted - hydrated from Supabase via fetchProducts)
   products: Product[];
   productsLoaded: boolean;
+
+  // Error feedback
+  lastError: string | null;
 
   // Uploaded images (kept in memory per session)
   uploadedImages: Record<string, string[]>;
@@ -26,6 +28,7 @@ interface AdminState {
   deleteProduct: (id: string) => Promise<void>;
   updateStock: (productId: string, quantity: number) => Promise<void>;
   decrementStock: (productId: string, quantity: number) => void;
+  clearError: () => void;
 
   // Image actions (local only)
   addUploadedImage: (productId: string, dataUrl: string) => void;
@@ -40,8 +43,9 @@ export const useAdminStore = create<AdminState>()(
     (set, get) => ({
       isAuthenticated: false,
       token: null,
-      products: initialProducts,
+      products: [],
       productsLoaded: false,
+      lastError: null,
       uploadedImages: {},
 
       // --- Auth ---
@@ -79,17 +83,24 @@ export const useAdminStore = create<AdminState>()(
         try {
           const res = await fetch("/api/products");
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          const data: Product[] = await res.json();
-          set({ products: data, productsLoaded: true });
+          const data = await res.json();
+          // Only update if we got a valid array (not an error object)
+          if (Array.isArray(data)) {
+            set({ products: data, productsLoaded: true });
+          } else {
+            console.error("[fetchProducts] Unexpected response:", data);
+            set({ productsLoaded: true });
+          }
         } catch (err) {
           console.error("[fetchProducts] Error:", err);
-          // Keep initialProducts as fallback; mark as loaded so we don't retry endlessly
+          // Keep current products in memory on error — do NOT reset to initialProducts
           set({ productsLoaded: true });
         }
       },
 
       addProduct: async (product) => {
         const { token } = get();
+        set({ lastError: null });
 
         // Optimistic: add to local state immediately
         set((state) => ({
@@ -107,16 +118,18 @@ export const useAdminStore = create<AdminState>()(
           });
 
           if (!res.ok) {
-            // Revert on failure
             set((state) => ({
               products: state.products.filter((p) => p.id !== product.id),
+              lastError: res.status === 401
+                ? "Oturum süresi dolmuş. Lütfen tekrar giriş yapın."
+                : `Ürün kaydedilemedi (HTTP ${res.status}). Lütfen tekrar deneyin.`,
             }));
-            console.error("[addProduct] API error:", res.status);
+            if (res.status === 401) set({ isAuthenticated: false, token: null });
           }
         } catch (err) {
-          // Revert on failure
           set((state) => ({
             products: state.products.filter((p) => p.id !== product.id),
+            lastError: "Sunucuya bağlanılamadı. İnternet bağlantınızı kontrol edin.",
           }));
           console.error("[addProduct] Error:", err);
         }
@@ -125,6 +138,7 @@ export const useAdminStore = create<AdminState>()(
       updateProduct: async (id, updates) => {
         const { token, products } = get();
         const original = products.find((p) => p.id === id);
+        set({ lastError: null });
 
         // Optimistic update
         set((state) => ({
@@ -144,7 +158,6 @@ export const useAdminStore = create<AdminState>()(
           });
 
           if (!res.ok) {
-            // Revert on failure
             if (original) {
               set((state) => ({
                 products: state.products.map((p) =>
@@ -152,10 +165,14 @@ export const useAdminStore = create<AdminState>()(
                 ),
               }));
             }
-            console.error("[updateProduct] API error:", res.status);
+            set({
+              lastError: res.status === 401
+                ? "Oturum süresi dolmuş. Lütfen tekrar giriş yapın."
+                : `Ürün güncellenemedi (HTTP ${res.status}). Lütfen tekrar deneyin.`,
+            });
+            if (res.status === 401) set({ isAuthenticated: false, token: null });
           }
         } catch (err) {
-          // Revert on failure
           if (original) {
             set((state) => ({
               products: state.products.map((p) =>
@@ -163,6 +180,7 @@ export const useAdminStore = create<AdminState>()(
               ),
             }));
           }
+          set({ lastError: "Sunucuya bağlanılamadı. İnternet bağlantınızı kontrol edin." });
           console.error("[updateProduct] Error:", err);
         }
       },
@@ -170,6 +188,7 @@ export const useAdminStore = create<AdminState>()(
       deleteProduct: async (id) => {
         const { token, products } = get();
         const original = products.find((p) => p.id === id);
+        set({ lastError: null });
 
         // Optimistic delete
         set((state) => ({
@@ -188,13 +207,17 @@ export const useAdminStore = create<AdminState>()(
           });
 
           if (!res.ok) {
-            // Revert on failure
             if (original) {
               set((state) => ({
                 products: [...state.products, original],
               }));
             }
-            console.error("[deleteProduct] API error:", res.status);
+            set({
+              lastError: res.status === 401
+                ? "Oturum süresi dolmuş. Lütfen tekrar giriş yapın."
+                : `Ürün silinemedi (HTTP ${res.status}).`,
+            });
+            if (res.status === 401) set({ isAuthenticated: false, token: null });
           }
         } catch (err) {
           if (original) {
@@ -202,9 +225,12 @@ export const useAdminStore = create<AdminState>()(
               products: [...state.products, original],
             }));
           }
+          set({ lastError: "Sunucuya bağlanılamadı." });
           console.error("[deleteProduct] Error:", err);
         }
       },
+
+      clearError: () => set({ lastError: null }),
 
       updateStock: async (productId, quantity) => {
         // Delegate to updateProduct which handles API + optimistic update

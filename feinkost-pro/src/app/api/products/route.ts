@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { validateSession } from "@/lib/auth";
 import { Product } from "@/types";
-import { products as initialProducts } from "@/data/products";
 
 // --- Supabase row types (snake_case) ---
 
@@ -78,12 +77,15 @@ function toProduct(
 /**
  * GET /api/products
  * Returns all products with variants and images, matching the frontend Product type.
- * Falls back to initialProducts if Supabase is not configured.
+ * Returns 503 if Supabase is not configured, 500 on DB error.
  */
 export async function GET() {
-  // Fallback when Supabase is not configured
+  // Error when Supabase is not configured
   if (!supabaseAdmin) {
-    return NextResponse.json(initialProducts);
+    return NextResponse.json(
+      { error: "Database not configured" },
+      { status: 503 }
+    );
   }
 
   try {
@@ -102,9 +104,9 @@ export async function GET() {
     const variantRows: VariantRow[] = variantsRes.data;
     const imageRows: ImageRow[] = imagesRes.data;
 
-    // If the products table is empty, fall back to initial data
+    // If the products table is empty, return empty array (don't fall back to hardcoded data)
     if (productRows.length === 0) {
-      return NextResponse.json(initialProducts);
+      return NextResponse.json([]);
     }
 
     // Group variants and images by product_id for fast lookup
@@ -133,8 +135,11 @@ export async function GET() {
     return NextResponse.json(products);
   } catch (err) {
     console.error("[GET /api/products] Supabase error:", err);
-    // Fallback to static data on DB error so the site never breaks
-    return NextResponse.json(initialProducts);
+    // Return error instead of silently falling back to hardcoded data
+    return NextResponse.json(
+      { error: "Failed to fetch products from database" },
+      { status: 500 }
+    );
   }
 }
 

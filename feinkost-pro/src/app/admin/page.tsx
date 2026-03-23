@@ -27,7 +27,7 @@ const categoryFilterDefs: { slug: CategorySlug | "all"; labelKey: string }[] = [
 ];
 
 export default function AdminPage() {
-  const { isAuthenticated, products, login, logout } = useAdminStore();
+  const { isAuthenticated, products, login, logout, lastError, clearError } = useAdminStore();
   const { t } = useLang();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -170,6 +170,15 @@ export default function AdminPage() {
           <span className="hidden sm:inline">{t("admin.logout")}</span>
         </button>
       </div>
+
+      {/* Error Banner */}
+      {lastError && (
+        <div className="mx-4 sm:mx-6 lg:mx-8 mt-4 max-w-[1400px] xl:mx-auto flex items-center gap-3 bg-brick-600 text-white px-4 py-3 rounded-lg shadow-lg">
+          <AlertCircle className="w-5 h-5 flex-shrink-0" />
+          <span className="text-sm font-medium flex-1">{lastError}</span>
+          <button type="button" onClick={clearError} className="text-white/70 hover:text-white text-lg leading-none">&times;</button>
+        </div>
+      )}
 
       {/* Main Content — Products Only */}
       <main className="p-5 sm:p-6 lg:p-8 max-w-[1400px] mx-auto">
