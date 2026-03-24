@@ -10,6 +10,8 @@ import {
   WebSiteJsonLd,
   LocalBusinessJsonLd,
 } from "@/components/seo/JsonLd";
+import { fetchProductsServer } from "@/lib/fetch-products-server";
+import { ProductHydrator } from "@/components/ProductHydrator";
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://vitanatur.de";
 
@@ -83,14 +85,20 @@ export const metadata: Metadata = {
   category: "Food & Drink",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Fetch products server-side — first visitor sees products instantly
+  const products = await fetchProductsServer();
+
   return (
     <html lang="de" suppressHydrationWarning>
       <body className="grain-overlay min-h-screen flex flex-col">
+        {/* Hydrate client store with server-fetched products */}
+        <ProductHydrator products={products} />
+
         {/* Global structured data */}
         <OrganizationJsonLd />
         <WebSiteJsonLd />

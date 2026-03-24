@@ -295,12 +295,11 @@ export const useAdminStore = create<AdminState>()(
     }),
     {
       name: "feinkost-admin",
-      version: 5,
-      // Persist auth + products cache for instant loading
+      version: 6,
+      // Only persist auth — products come from server-side fetch
       partialize: (state) => ({
         isAuthenticated: state.isAuthenticated,
         token: state.token,
-        products: state.products,
       }),
     }
   )
