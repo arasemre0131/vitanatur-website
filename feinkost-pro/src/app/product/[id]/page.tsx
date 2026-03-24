@@ -11,6 +11,7 @@ import { useCartStore } from "@/store/cart-store";
 import { useLang } from "@/lib/i18n";
 import { trackViewItem } from "@/lib/analytics";
 import { ProductJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import { ReviewSection } from "@/components/review/ReviewSection";
 
 export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -270,6 +271,9 @@ export default function ProductDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* Reviews */}
+      <ReviewSection productId={product.id} />
     </div>
   );
 }

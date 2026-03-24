@@ -26,7 +26,7 @@ export interface ProductVariant {
   weight: string;
 }
 
-export type CategorySlug = "gewuerze" | "trockenfruechte" | "fruehstueck" | "oele" | "nuesse" | "spezialitaeten";
+export type CategorySlug = "gewuerze" | "trockenfruechte" | "fruehstueck" | "oele" | "nuesse" | "spezialitaeten" | "kahveler" | "caylar" | "salcalar" | "zuehre-ana";
 
 export interface Category {
   slug: CategorySlug;

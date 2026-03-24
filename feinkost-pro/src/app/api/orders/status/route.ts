@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { validateSession } from "@/lib/auth";
+import { sendShippingNotification } from "@/lib/email";
 
 const VALID_STATUSES = ["pending", "confirmed", "preparing", "shipped", "delivered", "cancelled"];
 
@@ -73,6 +74,24 @@ export async function PATCH(request: Request) {
         { success: false, error: "Failed to update status" },
         { status: 500 }
       );
+    }
+
+    // Send shipping notification email when status changes to "shipped"
+    if (status === "shipped") {
+      const { data: orderData } = await supabase
+        .from("orders")
+        .select("customer_email, customer_first_name")
+        .eq("id", orderId)
+        .single();
+
+      if (orderData?.customer_email) {
+        sendShippingNotification(
+          orderData.customer_email,
+          orderData.customer_first_name || "Kunde",
+          orderId,
+          sanitizeString(body.trackingNumber, 100) || undefined
+        ).catch(() => {});
+      }
     }
 
     return NextResponse.json({

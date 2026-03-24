@@ -43,6 +43,11 @@ export const translations = {
   "cat.nuesse": { de: "Nüsse", tr: "Kuruyemişler", en: "Nuts" },
   "cat.spezialitaeten": { de: "Spezialitäten", tr: "Özel Ürünler", en: "Specialties" },
 
+  "cat.kahveler": { de: "Kaffee", tr: "Kahveler", en: "Coffee" },
+  "cat.caylar": { de: "Tee", tr: "Çaylar", en: "Tea" },
+  "cat.salcalar": { de: "Pasten", tr: "Salçalar", en: "Pastes" },
+  "cat.zuehre-ana": { de: "Zühre Ana", tr: "Zühre Ana", en: "Zühre Ana" },
+
   // Category descriptions
   "cat.gewuerze.desc": { de: "Handverlesene Gewürze aus dem Orient", tr: "Doğu'dan özenle seçilmiş baharatlar", en: "Hand-picked spices from the Orient" },
   "cat.trockenfruechte.desc": { de: "Sonnengetrocknete Früchte höchster Qualität", tr: "En kaliteli güneşte kurutulmuş meyveler", en: "Sun-dried fruits of the highest quality" },
@@ -50,6 +55,11 @@ export const translations = {
   "cat.oele.desc": { de: "Kaltgepresste Premiumöle", tr: "Soğuk sıkım premium yağlar", en: "Cold-pressed premium oils" },
   "cat.nuesse.desc": { de: "Erlesene Nüsse aus dem Mittelmeerraum", tr: "Akdeniz'den seçkin kuruyemişler", en: "Fine nuts from the Mediterranean" },
   "cat.spezialitaeten.desc": { de: "Handgefertigte Delikatessen", tr: "El yapımı özel lezzetler", en: "Handcrafted delicacies" },
+
+  "cat.kahveler.desc": { de: "Traditioneller türkischer Kaffee", tr: "Geleneksel Türk kahveleri", en: "Traditional Turkish coffee" },
+  "cat.caylar.desc": { de: "Feinste Teesorten aus der Türkei", tr: "Türkiye'den en seçkin çaylar", en: "Finest teas from Turkey" },
+  "cat.salcalar.desc": { de: "Traditionelle Paprika- und Tomatenpasten", tr: "Geleneksel biber ve domates salçaları", en: "Traditional pepper and tomato pastes" },
+  "cat.zuehre-ana.desc": { de: "Natürliche Gesundheitsprodukte", tr: "Doğal sağlık ürünleri", en: "Natural health products" },
 
   // Navigation
   "nav.home": { de: "Home", tr: "Ana Sayfa", en: "Home" },
@@ -313,7 +323,7 @@ export const translations = {
   "versand.intro": { de: "Wir liefern Ihre Bestellung schnell und sicher direkt zu Ihnen nach Hause.", tr: "Siparişlerinizi hızlı ve güvenli bir şekilde doğrudan kapınıza ulaştırıyoruz.", en: "We deliver your order quickly and securely right to your door." },
   "versand.germany_title": { de: "Lieferung innerhalb Deutschlands", tr: "Almanya içinde teslimat", en: "Delivery within Germany" },
   "versand.germany_time": { de: "Lieferzeit: 3–5 Werktage", tr: "Teslimat süresi: 3–5 iş günü", en: "Delivery time: 3–5 business days" },
-  "versand.germany_cost": { de: "Versandkosten: 4,90 €", tr: "Kargo ücreti: 4,90 €", en: "Shipping cost: €4.90" },
+  "versand.germany_cost": { de: "Versandkosten: 5,99 €", tr: "Kargo ücreti: 5,99 €", en: "Shipping cost: €5.99" },
   "versand.germany_free": { de: "Kostenloser Versand ab einem Bestellwert von 49 €", tr: "49 € üzerindeki siparişlerde ücretsiz kargo", en: "Free shipping on orders over €49" },
   "versand.austria_title": { de: "Lieferung nach Österreich & Schweiz", tr: "Avusturya & İsviçre'ye teslimat", en: "Delivery to Austria & Switzerland" },
   "versand.austria_time": { de: "Lieferzeit: 5–7 Werktage", tr: "Teslimat süresi: 5–7 iş günü", en: "Delivery time: 5–7 business days" },
@@ -351,7 +361,7 @@ export const translations = {
   "faq.q5": { de: "Wie soll ich die Produkte lagern?", tr: "Ürünleri nasıl saklamalıyım?", en: "How should I store the products?" },
   "faq.a5": { de: "Unsere Trockenfrüchte und Nüsse sollten kühl und trocken gelagert werden. Öle am besten lichtgeschützt aufbewahren. Detaillierte Hinweise finden Sie auf der Produktverpackung.", tr: "Kuru meyve ve kuruyemişlerimiz serin ve kuru bir yerde saklanmalıdır. Yağları ışıktan korunarak muhafaza edin. Detaylı bilgileri ürün ambalajında bulabilirsiniz.", en: "Our dried fruits and nuts should be stored in a cool, dry place. Oils are best kept away from light. Detailed instructions can be found on the product packaging." },
   "faq.q6": { de: "Bieten Sie Großhandelspreise an?", tr: "Toptan satış fiyatları sunuyor musunuz?", en: "Do you offer wholesale prices?" },
-  "faq.a6": { de: "Ja, für Großbestellungen bieten wir Sonderkonditionen an. Bitte kontaktieren Sie uns über das Kontaktformular oder per E-Mail an info@vitanatur.de.", tr: "Evet, toplu siparişler için özel fiyatlar sunuyoruz. Lütfen iletişim formumuz aracılığıyla veya info@vitanatur.de adresine e-posta ile bize ulaşın.", en: "Yes, we offer special rates for bulk orders. Please contact us through the contact form or by email at info@vitanatur.de." },
+  "faq.a6": { de: "Ja, für Großbestellungen bieten wir Sonderkonditionen an. Bitte kontaktieren Sie uns über das Kontaktformular oder per E-Mail an info@vitanatur.com.", tr: "Evet, toplu siparişler için özel fiyatlar sunuyoruz. Lütfen iletişim formumuz aracılığıyla veya info@vitanatur.com adresine e-posta ile bize ulaşın.", en: "Yes, we offer special rates for bulk orders. Please contact us through the contact form or by email at info@vitanatur.com." },
   "faq.q7": { de: "Ab welchem Bestellwert ist der Versand kostenlos?", tr: "Hangi sipariş tutarından itibaren kargo ücretsiz?", en: "What is the minimum order for free shipping?" },
   "faq.a7": { de: "Ab einem Bestellwert von 49 € liefern wir innerhalb Deutschlands versandkostenfrei.", tr: "49 € üzerindeki siparişlerde Almanya içinde ücretsiz kargo sunuyoruz.", en: "We offer free shipping within Germany on orders of €49 or more." },
   "faq.q8": { de: "Woher stammen Ihre Produkte?", tr: "Ürünleriniz nereden geliyor?", en: "Where do your products come from?" },
@@ -401,6 +411,26 @@ export const translations = {
   "stock.sort_name": { de: "Nach Name sortieren", tr: "İsme göre sırala", en: "Sort by name" },
   "stock.low_alert_banner": { de: "{count} Produkte haben niedrigen Bestand!", tr: "{count} üründe düşük stok!", en: "{count} products have low stock!" },
   "stock.few_left": { de: "Nur noch wenige!", tr: "Son birkaç ürün!", en: "Only a few left!" },
+
+  // Reviews
+  "review.title": { de: "Kundenbewertungen", tr: "Müşteri Yorumları", en: "Customer Reviews" },
+  "review.no_reviews": { de: "Noch keine Bewertungen. Seien Sie der Erste!", tr: "Henüz yorum yok. İlk yorumu siz yazın!", en: "No reviews yet. Be the first!" },
+  "review.write_as": { de: "Bewertung als", tr: "Yorum yap:", en: "Review as" },
+  "review.your_rating": { de: "Ihre Bewertung", tr: "Puanınız", en: "Your rating" },
+  "review.your_comment": { de: "Ihr Kommentar", tr: "Yorumunuz", en: "Your comment" },
+  "review.placeholder": { de: "Teilen Sie Ihre Erfahrung mit diesem Produkt...", tr: "Bu ürünle ilgili deneyiminizi paylaşın...", en: "Share your experience with this product..." },
+  "review.submit": { de: "Bewertung abgeben", tr: "Yorum gönder", en: "Submit review" },
+  "review.submitting": { de: "Wird gesendet...", tr: "Gönderiliyor...", en: "Submitting..." },
+  "review.success": { de: "Vielen Dank für Ihre Bewertung!", tr: "Yorumunuz için teşekkürler!", en: "Thank you for your review!" },
+  "review.error": { de: "Fehler beim Senden. Bitte versuchen Sie es erneut.", tr: "Gönderim hatası. Lütfen tekrar deneyin.", en: "Failed to submit. Please try again." },
+  "review.login_required": { de: "Melden Sie sich an, um eine Bewertung abzugeben", tr: "Yorum yapmak için giriş yapın", en: "Log in to write a review" },
+  "review.login_to_review": { de: "Anmelden / Registrieren", tr: "Giriş Yap / Kayıt Ol", en: "Log in / Register" },
+  "review.login": { de: "Anmelden", tr: "Giriş Yap", en: "Log in" },
+  "review.register": { de: "Registrieren", tr: "Kayıt Ol", en: "Register" },
+  "review.name_placeholder": { de: "Ihr Name", tr: "Adınız", en: "Your name" },
+  "review.email_placeholder": { de: "E-Mail-Adresse", tr: "E-posta adresi", en: "Email address" },
+  "review.password_placeholder": { de: "Passwort (min. 6 Zeichen)", tr: "Şifre (min. 6 karakter)", en: "Password (min. 6 chars)" },
+  "review.name_required": { de: "Bitte geben Sie Ihren Namen ein", tr: "Lütfen adınızı girin", en: "Please enter your name" },
 
   // Stripe Payment
   "checkout.secure_online_payment": { de: "Sichere Online-Zahlung", tr: "Guvenli Online Odeme", en: "Secure Online Payment" },

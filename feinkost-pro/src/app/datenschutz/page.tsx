@@ -7,7 +7,7 @@ export default function DatenschutzPage() {
         <section>
           <h2 className="font-serif text-xl text-espresso-600 mb-3">1. Verantwortlicher</h2>
           <p>Verantwortlich für die Datenverarbeitung auf dieser Website ist:</p>
-          <p>Vitanatur<br />Berlin, Deutschland<br />E-Mail: info@vitanatur.de<br />Telefon: -</p>
+          <p>Vitanatur<br />Bleicherweg 5, 40724 Hilden, Deutschland<br />E-Mail: info@vitanatur.com<br />Telefon: +49 1520 3426787</p>
         </section>
 
         <section>
@@ -70,7 +70,7 @@ export default function DatenschutzPage() {
           <h3 className="font-serif text-lg text-espresso-600 mt-4 mb-2">Recht auf Datenübertragbarkeit (Art. 20 DSGVO)</h3>
           <p>Sie haben das Recht, die Sie betreffenden personenbezogenen Daten in einem strukturierten, gängigen und maschinenlesbaren Format zu erhalten.</p>
 
-          <p className="mt-4">Zur Ausübung Ihrer Rechte wenden Sie sich bitte an: <a href="mailto:info@vitanatur.de" className="text-olive-500 hover:underline">info@vitanatur.de</a></p>
+          <p className="mt-4">Zur Ausübung Ihrer Rechte wenden Sie sich bitte an: <a href="mailto:info@vitanatur.com" className="text-olive-500 hover:underline">info@vitanatur.com</a></p>
         </section>
 
         <section>
@@ -90,7 +90,7 @@ export default function DatenschutzPage() {
         <section>
           <h2 className="font-serif text-xl text-espresso-600 mb-3">8. Kontakt</h2>
           <p>Bei Fragen zum Datenschutz erreichen Sie uns unter:</p>
-          <p>Vitanatur<br />Berlin, Deutschland<br />E-Mail: <a href="mailto:info@vitanatur.de" className="text-olive-500 hover:underline">info@vitanatur.de</a></p>
+          <p>Vitanatur<br />Bleicherweg 5, 40724 Hilden, Deutschland<br />E-Mail: <a href="mailto:info@vitanatur.com" className="text-olive-500 hover:underline">info@vitanatur.com</a><br />Telefon: +49 1520 3426787</p>
         </section>
 
         <section>

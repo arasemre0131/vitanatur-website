@@ -8,7 +8,7 @@ import { useLang } from "@/lib/i18n";
 export function AdminSettings() {
   const { t } = useLang();
   const [shopName, setShopName] = useState("Vitanatur");
-  const [email, setEmail] = useState("info@vitanatur.de");
+  const [email, setEmail] = useState("info@vitanatur.com");
   const [shippingThreshold, setShippingThreshold] = useState("49");
   const [currencyPosition, setCurrencyPosition] = useState<"after" | "before">(
     "after"

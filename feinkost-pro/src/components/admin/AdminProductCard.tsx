@@ -6,13 +6,17 @@ import { Product, CategorySlug } from "@/types";
 import { useAdminStore } from "@/store/admin-store";
 import { useLang } from "@/lib/i18n";
 
-const categoryLabelKeys: Record<CategorySlug, "cat.gewuerze" | "cat.trockenfruechte" | "cat.fruehstueck" | "cat.oele" | "cat.nuesse" | "cat.spezialitaeten"> = {
+const categoryLabelKeys: Record<CategorySlug, string> = {
   gewuerze: "cat.gewuerze",
   trockenfruechte: "cat.trockenfruechte",
   fruehstueck: "cat.fruehstueck",
   oele: "cat.oele",
   nuesse: "cat.nuesse",
   spezialitaeten: "cat.spezialitaeten",
+  kahveler: "cat.kahveler",
+  caylar: "cat.caylar",
+  salcalar: "cat.salcalar",
+  "zuehre-ana": "cat.zuehre-ana",
 };
 
 const categoryColors: Record<CategorySlug, string> = {
@@ -22,6 +26,10 @@ const categoryColors: Record<CategorySlug, string> = {
   oele: "bg-yellow-100 text-yellow-800",
   nuesse: "bg-emerald-100 text-emerald-700",
   spezialitaeten: "bg-brick-300/20 text-brick-700",
+  kahveler: "bg-rose-100 text-rose-800",
+  caylar: "bg-teal-100 text-teal-700",
+  salcalar: "bg-red-100 text-red-700",
+  "zuehre-ana": "bg-purple-100 text-purple-700",
 };
 
 interface AdminProductCardProps {
@@ -87,7 +95,7 @@ export function AdminProductCard({ product, onEdit }: AdminProductCardProps) {
         <span
           className={`absolute top-2.5 left-2.5 px-2.5 py-1 text-xs font-semibold rounded-full backdrop-blur-sm ${categoryColors[product.category] || "bg-sand-200 text-espresso-600"}`}
         >
-          {t(categoryLabelKeys[product.category]) ?? product.category}
+          {t(categoryLabelKeys[product.category] as Parameters<typeof t>[0]) ?? product.category}
         </span>
         {/* Stock indicator */}
         <span

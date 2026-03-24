@@ -10,6 +10,10 @@ const CATEGORY_SLUGS = [
   "oele",
   "nuesse",
   "spezialitaeten",
+  "kahveler",
+  "caylar",
+  "salcalar",
+  "zuehre-ana",
 ] as const;
 
 export function Footer() {
@@ -29,10 +33,11 @@ export function Footer() {
           {/* About */}
           <div className="sm:col-span-2 lg:col-span-1">
             <Link href="/" className="inline-flex items-center gap-2 mb-4">
-              <span className="font-serif text-lg font-semibold tracking-widest text-cream-100">
-                VITANATUR
-              </span>
-              <span className="w-1.5 h-1.5 rounded-full bg-olive-400" />
+              <img
+                src="/images/vitanatur-logo-transparent.png"
+                alt="Vitanatur"
+                className="h-12 w-12 rounded-full object-cover"
+              />
             </Link>
             <p className="text-sm leading-relaxed text-cream-300 max-w-xs">
               {t("footer.about")}
@@ -84,14 +89,32 @@ export function Footer() {
             </h3>
             <address className="not-italic text-sm text-cream-300 space-y-2.5">
               <p>Vitanatur</p>
-              <p>Musterstraße 12</p>
-              <p>10115 Berlin</p>
+              <p>Bleicherweg 5</p>
+              <p>40724 Hilden</p>
               <p className="pt-1">
                 <a
-                  href="mailto:info@vitanatur.de"
+                  href="tel:+4915203426787"
                   className="hover:text-cream-100 transition-colors"
                 >
-                  info@vitanatur.de
+                  +49 1520 3426787
+                </a>
+              </p>
+              <p>
+                <a
+                  href="mailto:info@vitanatur.com"
+                  className="hover:text-cream-100 transition-colors"
+                >
+                  info@vitanatur.com
+                </a>
+              </p>
+              <p>
+                <a
+                  href="https://instagram.com/vitanatur.shop61"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-cream-100 transition-colors"
+                >
+                  @vitanatur.shop61
                 </a>
               </p>
             </address>

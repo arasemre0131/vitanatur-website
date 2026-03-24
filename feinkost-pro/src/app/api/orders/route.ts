@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { sendOrderConfirmation, sendNewOrderNotification } from "@/lib/email";
 
 const MAX_STRING_LENGTH = 500;
 
@@ -121,6 +122,26 @@ export async function POST(request: Request) {
 
       await supabase.from("order_items").insert(orderItems);
     }
+
+    // Send email notifications (non-blocking)
+    const emailData = {
+      orderId,
+      items: items.map((item: any) => ({
+        name: sanitizeString(item.name, 200),
+        variantName: item.variantName ? sanitizeString(item.variantName, 200) : null,
+        quantity: typeof item.quantity === "number" ? item.quantity : 1,
+        unitPrice: typeof item.unitPrice === "number" ? item.unitPrice : 0,
+        totalPrice: typeof item.totalPrice === "number" ? item.totalPrice : 0,
+      })),
+      subtotal,
+      shippingCost: typeof shippingCost === "number" ? shippingCost : 0,
+      total,
+      customer: { firstName, lastName, email, phone, street, city, postalCode, country },
+    };
+
+    // Fire-and-forget: don't await these — they should not block the response
+    sendOrderConfirmation(emailData).catch(() => {});
+    sendNewOrderNotification(emailData).catch(() => {});
 
     // Try to send Telegram notification (non-blocking)
     try {

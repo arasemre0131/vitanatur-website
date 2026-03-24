@@ -37,4 +37,28 @@ export const categories: Category[] = [
     description: "Handgefertigte Delikatessen",
     image: "",
   },
+  {
+    slug: "kahveler",
+    name: "Kaffee",
+    description: "Traditioneller türkischer Kaffee",
+    image: "",
+  },
+  {
+    slug: "caylar",
+    name: "Tee",
+    description: "Feinste Teesorten aus der Türkei",
+    image: "",
+  },
+  {
+    slug: "salcalar",
+    name: "Pasten",
+    description: "Traditionelle Paprika- und Tomatenpasten",
+    image: "",
+  },
+  {
+    slug: "zuehre-ana",
+    name: "Zühre Ana",
+    description: "Natürliche Gesundheitsprodukte",
+    image: "",
+  },
 ];

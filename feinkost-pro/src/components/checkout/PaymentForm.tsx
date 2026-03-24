@@ -78,7 +78,7 @@ export function PaymentForm() {
   const FREE_SHIPPING_THRESHOLD =
     Number(process.env.NEXT_PUBLIC_FREE_SHIPPING_THRESHOLD) || 49;
   const subtotal = totalPrice();
-  const shippingCost = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : 4.9;
+  const shippingCost = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : 5.99;
   const discount = getDiscount(subtotal);
   const total = Math.max(0, subtotal + shippingCost - discount);
 

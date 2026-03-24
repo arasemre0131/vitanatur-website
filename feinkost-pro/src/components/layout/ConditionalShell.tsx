@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { useLang } from "@/lib/i18n";
 import { useProductSync } from "@/hooks/useProductSync";
+import { useCustomerAuth } from "@/store/auth-store";
 
 export function ConditionalShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -15,6 +16,12 @@ export function ConditionalShell({ children }: { children: React.ReactNode }) {
 
   // Hydrate products from Supabase on app init
   useProductSync();
+
+  // Initialize customer auth
+  const initAuth = useCustomerAuth((s) => s.initialize);
+  useEffect(() => {
+    initAuth();
+  }, [initAuth]);
 
   useEffect(() => {
     document.documentElement.lang = lang;

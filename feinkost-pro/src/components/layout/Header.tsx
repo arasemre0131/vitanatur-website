@@ -15,6 +15,10 @@ const NAV_SLUGS = [
   "oele",
   "nuesse",
   "spezialitaeten",
+  "kahveler",
+  "caylar",
+  "salcalar",
+  "zuehre-ana",
 ] as const;
 
 export function Header() {
@@ -34,7 +38,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 bg-cream-50/95 backdrop-blur-sm border-b border-sand-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
+        <div className="flex items-center justify-between h-20 lg:h-24">
           {/* Mobile menu button */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -44,16 +48,16 @@ export function Header() {
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
 
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <span className="font-serif text-xl sm:text-2xl font-semibold tracking-widest text-espresso-600 group-hover:text-espresso-500 transition-colors">
-              VITANATUR
-            </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-olive-500 group-hover:bg-olive-400 transition-colors" />
+          {/* Logo + Desktop nav */}
+          <div className="hidden lg:flex items-center gap-1">
+          <Link href="/" className="flex items-center mr-2">
+            <img
+              src="/images/vitanatur-logo-transparent.png"
+              alt="Vitanatur"
+              className="h-20 w-20 rounded-full object-contain"
+            />
           </Link>
-
-          {/* Desktop nav */}
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -64,6 +68,16 @@ export function Header() {
               </Link>
             ))}
           </nav>
+          </div>
+
+          {/* Mobile logo */}
+          <Link href="/" className="lg:hidden flex items-center">
+            <img
+              src="/images/vitanatur-logo-transparent.png"
+              alt="Vitanatur"
+              className="h-16 w-16 rounded-full object-contain"
+            />
+          </Link>
 
           {/* Search + Lang switch + Cart button */}
           <div className="flex items-center gap-3">

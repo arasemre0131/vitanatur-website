@@ -34,7 +34,7 @@ export default function AGBPage() {
           <h2 className="font-serif text-xl text-espresso-600 mb-3">§ 4 Lieferung und Versandkosten</h2>
           <p>Wir liefern innerhalb Deutschlands, nach Österreich und in die Schweiz.</p>
           <ul className="list-disc pl-6 space-y-1 mt-3">
-            <li>Versandkosten Deutschland: 4,90 &euro; (kostenloser Versand ab 49,00 &euro; Bestellwert)</li>
+            <li>Versandkosten Deutschland: 5,99 &euro; (kostenloser Versand ab 49,00 &euro; Bestellwert)</li>
             <li>Versandkosten Österreich: 6,90 &euro;</li>
             <li>Versandkosten Schweiz: 9,90 &euro;</li>
           </ul>
@@ -51,7 +51,7 @@ export default function AGBPage() {
           <p><strong>Widerrufsbelehrung:</strong></p>
           <p className="mt-3">Sie haben das Recht, binnen vierzehn Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen. Die Widerrufsfrist beträgt vierzehn Tage ab dem Tag, an dem Sie oder ein von Ihnen benannter Dritter, der nicht der Beförderer ist, die Waren in Besitz genommen haben bzw. hat.</p>
           <p className="mt-3">Um Ihr Widerrufsrecht auszuüben, müssen Sie uns</p>
-          <p>Vitanatur<br />Berlin, Deutschland<br />E-Mail: info@vitanatur.de<br />Telefon: -</p>
+          <p>Vitanatur<br />Bleicherweg 5, 40724 Hilden, Deutschland<br />E-Mail: info@vitanatur.com<br />Telefon: +49 1520 3426787</p>
           <p className="mt-3">mittels einer eindeutigen Erklärung (z.&nbsp;B. ein mit der Post versandter Brief oder E-Mail) über Ihren Entschluss, diesen Vertrag zu widerrufen, informieren.</p>
           <p className="mt-3"><strong>Folgen des Widerrufs:</strong></p>
           <p>Wenn Sie diesen Vertrag widerrufen, haben wir Ihnen alle Zahlungen, die wir von Ihnen erhalten haben, einschließlich der Lieferkosten (mit Ausnahme der zusätzlichen Kosten, die sich daraus ergeben, dass Sie eine andere Art der Lieferung als die von uns angebotene, günstigste Standardlieferung gewählt haben), unverzüglich und spätestens binnen vierzehn Tagen ab dem Tag zurückzuzahlen, an dem die Mitteilung über Ihren Widerruf dieses Vertrags bei uns eingegangen ist.</p>

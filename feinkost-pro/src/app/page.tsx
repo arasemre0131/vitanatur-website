@@ -8,8 +8,26 @@ import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { useLang } from "@/lib/i18n";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 
+function ProductSkeleton() {
+  return (
+    <div className="animate-pulse grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {Array.from({ length: 8 }).map((_, i) => (
+        <div key={i} className="rounded-xl overflow-hidden bg-white shadow-sm">
+          <div className="aspect-square bg-sand-200" />
+          <div className="p-4 space-y-3">
+            <div className="h-4 bg-sand-200 rounded w-3/4" />
+            <div className="h-3 bg-sand-100 rounded w-1/2" />
+            <div className="h-5 bg-sand-200 rounded w-1/3" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function HomePage() {
   const products = useAdminStore((s) => s.products);
+  const productsLoaded = useAdminStore((s) => s.productsLoaded);
   const featuredProducts = products.filter((p) => p.featured);
   const { t } = useLang();
 
@@ -21,16 +39,13 @@ export default function HomePage() {
       <section className="relative overflow-hidden min-h-[420px] sm:min-h-[500px] lg:min-h-[600px] flex items-center justify-center">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/images/hero-bg.jpg')" }}
+          style={{ backgroundImage: "url('/images/hero-banner.webp'), url('/images/hero-banner.jpg')" }}
         />
-        <div className="absolute inset-0 bg-espresso-700/50" />
+        <div className="absolute inset-0 bg-espresso-700/40" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 lg:py-40 text-center">
           <h1 className="font-serif text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-widest text-white leading-tight drop-shadow-lg">
             VITANATUR
           </h1>
-          <p className="mt-3 font-serif text-lg sm:text-xl lg:text-2xl text-cream-200 tracking-[0.2em] drop-shadow-md">
-            {t("hero.subtitle_brand")}
-          </p>
           <Link
             href="#sortiment"
             className="mt-10 inline-block px-10 py-4 rounded-lg bg-olive-500/90 text-white font-medium transition-all hover:bg-olive-600 active:bg-olive-700 shadow-lg hover:shadow-xl backdrop-blur-sm text-base"
@@ -45,7 +60,7 @@ export default function HomePage() {
         <h2 className="font-serif text-3xl sm:text-4xl text-espresso-600 mb-10 text-center">
           {t("home.featured")}
         </h2>
-        <ProductGrid products={featuredProducts} />
+        {!productsLoaded ? <ProductSkeleton /> : <ProductGrid products={featuredProducts} />}
       </section>
 
       {/* ---- Categories Showcase ---- */}

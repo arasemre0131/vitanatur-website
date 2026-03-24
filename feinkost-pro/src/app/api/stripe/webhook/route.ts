@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { supabase } from "@/lib/supabase";
+import { sendOrderConfirmation, sendNewOrderNotification } from "@/lib/email";
 
 export async function POST(request: Request) {
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -80,6 +81,29 @@ export async function POST(request: Request) {
         console.error("Database error saving order:", dbError);
       }
     }
+
+    // Send email notifications (non-blocking)
+    const emailData = {
+      orderId,
+      items: metadata.orderItems
+        ? metadata.orderItems.split(" | ").map((s: string) => ({ name: s, quantity: 1, unitPrice: 0, totalPrice: 0 }))
+        : [],
+      subtotal: (session.amount_subtotal || 0) / 100,
+      shippingCost: 0,
+      total: (session.amount_total || 0) / 100,
+      customer: {
+        firstName: metadata.customerFirstName || "",
+        lastName: metadata.customerLastName || "",
+        email: metadata.customerEmail || session.customer_email || "",
+        phone: metadata.customerPhone || "",
+        street: metadata.shippingStreet || "",
+        city: metadata.shippingCity || "",
+        postalCode: metadata.shippingPostalCode || "",
+        country: metadata.shippingCountry || "DE",
+      },
+    };
+    sendOrderConfirmation(emailData).catch(() => {});
+    sendNewOrderNotification(emailData).catch(() => {});
 
     // Send Telegram notification (non-blocking)
     try {

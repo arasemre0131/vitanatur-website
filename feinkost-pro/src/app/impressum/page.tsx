@@ -5,15 +5,16 @@ export default function ImpressumPage() {
       <div className="prose prose-espresso space-y-6 text-espresso-500">
         <section>
           <h2 className="font-serif text-xl text-espresso-600 mb-3">Angaben gemäß § 5 TMG</h2>
-          <p>Vitanatur<br />Yasin Bey<br />Berlin<br />Deutschland</p>
+          <p>Vitanatur<br />Yasin Ergin Yavuz<br />Bleicherweg 5<br />40724 Hilden<br />Deutschland</p>
         </section>
         <section>
           <h2 className="font-serif text-xl text-espresso-600 mb-3">Kontakt</h2>
-          <p>E-Mail: info@vitanatur.de</p>
+          <p>E-Mail: <a href="mailto:info@vitanatur.com" className="text-olive-500 hover:underline">info@vitanatur.com</a></p>
+          <p>Telefon: <a href="tel:+4915203426787" className="text-olive-500 hover:underline">+49 1520 3426787</a></p>
         </section>
         <section>
           <h2 className="font-serif text-xl text-espresso-600 mb-3">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
-          <p>Yasin Bey<br />Berlin</p>
+          <p>Yasin Ergin Yavuz<br />Bleicherweg 5, 40724 Hilden</p>
         </section>
         <section>
           <h2 className="font-serif text-xl text-espresso-600 mb-3">EU-Streitschlichtung</h2>

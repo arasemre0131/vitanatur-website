@@ -8,13 +8,17 @@ import { useLang } from "@/lib/i18n";
 import { Button } from "@/components/ui/Button";
 import { DragDropZone } from "./DragDropZone";
 
-const categories: { slug: CategorySlug; labelKey: "cat.gewuerze" | "cat.trockenfruechte" | "cat.fruehstueck" | "cat.oele" | "cat.nuesse" | "cat.spezialitaeten" }[] = [
+const categories: { slug: CategorySlug; labelKey: string }[] = [
   { slug: "gewuerze", labelKey: "cat.gewuerze" },
   { slug: "trockenfruechte", labelKey: "cat.trockenfruechte" },
   { slug: "fruehstueck", labelKey: "cat.fruehstueck" },
   { slug: "oele", labelKey: "cat.oele" },
   { slug: "nuesse", labelKey: "cat.nuesse" },
   { slug: "spezialitaeten", labelKey: "cat.spezialitaeten" },
+  { slug: "kahveler", labelKey: "cat.kahveler" },
+  { slug: "caylar", labelKey: "cat.caylar" },
+  { slug: "salcalar", labelKey: "cat.salcalar" },
+  { slug: "zuehre-ana", labelKey: "cat.zuehre-ana" },
 ];
 
 interface ProductFormProps {
@@ -254,7 +258,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
                 >
                   {categories.map((c) => (
                     <option key={c.slug} value={c.slug}>
-                      {t(c.labelKey)}
+                      {t(c.labelKey as Parameters<typeof t>[0])}
                     </option>
                   ))}
                 </select>
