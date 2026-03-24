@@ -100,6 +100,10 @@ export const metadata: Metadata = {
   category: "Food & Drink",
 };
 
+// ISR: Vercel caches this page for 5 minutes, then revalidates in background
+// Visitors ALWAYS get instant cached version, never wait for Supabase
+export const revalidate = 300;
+
 export default async function RootLayout({
   children,
 }: {
