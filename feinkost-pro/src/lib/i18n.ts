@@ -180,6 +180,8 @@ export const translations = {
   "admin.drag_drop": { de: "Bilder hierher ziehen", tr: "Görselleri buraya sürükleyin", en: "Drag images here" },
   "admin.drag_drop_sub": { de: "oder klicken zum Auswählen", tr: "veya seçmek için tıklayın", en: "or click to browse" },
   "admin.drag_drop_limit": { de: "Nur Bilddateien, max. 5 MB pro Datei", tr: "Sadece görsel dosyalar, dosya başına maks. 5 MB", en: "Image files only, max 5 MB per file" },
+  "admin.drag_drop_limit_v2": { de: "Bilder (JPG, PNG, HEIC) max. 5 MB · Videos (MP4, MOV) max. 50 MB", tr: "Görseller (JPG, PNG, HEIC) maks. 5 MB · Videolar (MP4, MOV) maks. 50 MB", en: "Images (JPG, PNG, HEIC) max 5 MB · Videos (MP4, MOV) max 50 MB" },
+  "admin.converting_heic": { de: "HEIC wird konvertiert...", tr: "HEIC dönüştürülüyor...", en: "Converting HEIC..." },
   "admin.variant_name": { de: "Name", tr: "İsim", en: "Name" },
   "admin.variant_price": { de: "Preis", tr: "Fiyat", en: "Price" },
   "admin.variant_weight": { de: "Gewicht", tr: "Ağırlık", en: "Weight" },

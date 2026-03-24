@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { Upload, X, AlertCircle } from "lucide-react";
+import { Upload, X, AlertCircle, Film } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 
 interface DragDropZoneProps {
@@ -10,23 +10,86 @@ interface DragDropZoneProps {
   onImagesChange: (images: string[]) => void;
 }
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50MB
+
+const ACCEPTED_TYPES: Record<string, string[]> = {
+  "image/*": [".jpg", ".jpeg", ".png", ".webp", ".gif", ".heic", ".heif"],
+  "video/*": [".mp4", ".mov", ".webm"],
+};
+
+function isVideoFile(file: File | string): boolean {
+  if (typeof file === "string") {
+    return file.startsWith("data:video/") || file.match(/\.(mp4|mov|webm)(\?|$)/i) !== null;
+  }
+  return file.type.startsWith("video/");
+}
+
+function isVideoUrl(url: string): boolean {
+  return url.startsWith("data:video/") || /\.(mp4|mov|webm)(\?|$)/i.test(url);
+}
 
 export function DragDropZone({ images, onImagesChange }: DragDropZoneProps) {
   const { t } = useLang();
   const [error, setError] = useState<string | null>(null);
+  const [converting, setConverting] = useState(false);
+
+  const convertHeicToJpeg = async (file: File): Promise<File> => {
+    // Dynamic import heic2any only when needed
+    try {
+      const heic2any = (await import("heic2any")).default;
+      const blob = await heic2any({ blob: file, toType: "image/jpeg", quality: 0.85 }) as Blob;
+      return new File([blob], file.name.replace(/\.heic$/i, ".jpg").replace(/\.heif$/i, ".jpg"), {
+        type: "image/jpeg",
+      });
+    } catch {
+      // If conversion fails, return original file
+      return file;
+    }
+  };
 
   const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
+    async (acceptedFiles: File[]) => {
       setError(null);
 
-      const oversized = acceptedFiles.filter((f) => f.size > MAX_FILE_SIZE);
+      const oversized = acceptedFiles.filter((f) => {
+        const limit = isVideoFile(f) ? MAX_VIDEO_SIZE : MAX_IMAGE_SIZE;
+        return f.size > limit;
+      });
+
       if (oversized.length > 0) {
         setError(t("admin.file_too_large"));
       }
 
-      const validFiles = acceptedFiles.filter((f) => f.size <= MAX_FILE_SIZE);
+      let validFiles = acceptedFiles.filter((f) => {
+        const limit = isVideoFile(f) ? MAX_VIDEO_SIZE : MAX_IMAGE_SIZE;
+        return f.size <= limit;
+      });
+
       if (validFiles.length === 0) return;
+
+      // Convert HEIC/HEIF files to JPEG
+      const heicFiles = validFiles.filter(
+        (f) => f.type === "image/heic" || f.type === "image/heif" ||
+               f.name.toLowerCase().endsWith(".heic") || f.name.toLowerCase().endsWith(".heif")
+      );
+
+      if (heicFiles.length > 0) {
+        setConverting(true);
+        const converted = await Promise.all(
+          validFiles.map(async (f) => {
+            if (
+              f.type === "image/heic" || f.type === "image/heif" ||
+              f.name.toLowerCase().endsWith(".heic") || f.name.toLowerCase().endsWith(".heif")
+            ) {
+              return convertHeicToJpeg(f);
+            }
+            return f;
+          })
+        );
+        validFiles = converted;
+        setConverting(false);
+      }
 
       const readers = validFiles.map(
         (file) =>
@@ -41,7 +104,7 @@ export function DragDropZone({ images, onImagesChange }: DragDropZoneProps) {
         onImagesChange([...images, ...dataUrls]);
       });
     },
-    [images, onImagesChange]
+    [images, onImagesChange, t]
   );
 
   const removeImage = (index: number) => {
@@ -50,7 +113,7 @@ export function DragDropZone({ images, onImagesChange }: DragDropZoneProps) {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: { "image/*": [] },
+    accept: ACCEPTED_TYPES,
     multiple: true,
   });
 
@@ -77,14 +140,14 @@ export function DragDropZone({ images, onImagesChange }: DragDropZoneProps) {
           </div>
           <div>
             <p className="font-medium text-espresso-600">
-              {isDragActive ? "..." : t("admin.drag_drop")}
+              {converting ? t("admin.converting_heic") : isDragActive ? "..." : t("admin.drag_drop")}
             </p>
             <p className="text-sm text-espresso-400 mt-1">
               {t("admin.drag_drop_sub")}
             </p>
           </div>
           <p className="text-xs text-espresso-400/70">
-            {t("admin.drag_drop_limit")}
+            {t("admin.drag_drop_limit_v2")}
           </p>
         </div>
       </div>
@@ -103,11 +166,24 @@ export function DragDropZone({ images, onImagesChange }: DragDropZoneProps) {
               key={index}
               className="relative group aspect-square rounded-lg overflow-hidden border border-sand-200 bg-cream-50"
             >
-              <img
-                src={src}
-                alt={`Yüklenen ${index + 1}`}
-                className="w-full h-full object-cover"
-              />
+              {isVideoUrl(src) ? (
+                <div className="w-full h-full flex items-center justify-center bg-espresso-700/10">
+                  <video
+                    src={src}
+                    className="w-full h-full object-cover"
+                    muted
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Film className="w-8 h-8 text-white drop-shadow-lg" />
+                  </div>
+                </div>
+              ) : (
+                <img
+                  src={src}
+                  alt={`Upload ${index + 1}`}
+                  className="w-full h-full object-cover"
+                />
+              )}
               <button
                 type="button"
                 onClick={() => removeImage(index)}
