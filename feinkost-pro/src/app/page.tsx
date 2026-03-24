@@ -81,7 +81,7 @@ export default function HomePage() {
                   className="group relative rounded-xl overflow-hidden aspect-[4/3] bg-white shadow-sm transition-all duration-300 hover:shadow-lg hover:scale-[1.02]"
                 >
                   {categoryImage ? (
-                    <img src={categoryImage} alt={t(`cat.${cat.slug}` as Parameters<typeof t>[0])} className="absolute inset-0 w-full h-full object-cover" />
+                    <img src={categoryImage} alt={t(`cat.${cat.slug}` as Parameters<typeof t>[0])} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
                   ) : (
                     <ImagePlaceholder />
                   )}

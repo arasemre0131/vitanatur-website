@@ -109,6 +109,7 @@ export function ImageCarousel({
             alt={`${alt} ${i + 1}`}
             className="w-full h-full object-cover flex-shrink-0"
             draggable={false}
+            loading={i === 0 ? "eager" : "lazy"}
           />
         ))}
       </div>

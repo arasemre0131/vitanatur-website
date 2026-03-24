@@ -132,7 +132,9 @@ export async function GET() {
       )
     );
 
-    return NextResponse.json(products);
+    return NextResponse.json(products, {
+      headers: { "Cache-Control": "public, s-maxage=300, stale-while-revalidate=3600" },
+    });
   } catch (err) {
     console.error("[GET /api/products] Supabase error:", err);
     // Return error instead of silently falling back to hardcoded data

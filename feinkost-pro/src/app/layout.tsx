@@ -1,6 +1,21 @@
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
+import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin", "latin-ext"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-playfair",
+  display: "swap",
+});
 import { ConditionalShell } from "@/components/layout/ConditionalShell";
 import { CookieConsent } from "@/components/ui/CookieConsent";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
@@ -94,8 +109,8 @@ export default async function RootLayout({
   const products = await fetchProductsServer();
 
   return (
-    <html lang="de" suppressHydrationWarning>
-      <body className="grain-overlay min-h-screen flex flex-col">
+    <html lang="de" suppressHydrationWarning className={`${inter.variable} ${playfair.variable}`}>
+      <body className="grain-overlay min-h-screen flex flex-col font-sans">
         {/* Hydrate client store with server-fetched products */}
         <ProductHydrator products={products} />
 

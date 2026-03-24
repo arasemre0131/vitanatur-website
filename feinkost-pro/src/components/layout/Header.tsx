@@ -80,6 +80,9 @@ export function Header() {
               src="/images/vitanatur-logo-transparent.png"
               alt="Vitanatur"
               className="h-16 w-16 lg:h-20 lg:w-20 rounded-full object-contain"
+              fetchPriority="high"
+              width={80}
+              height={80}
             />
           </Link>
 
