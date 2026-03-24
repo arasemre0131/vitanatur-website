@@ -136,12 +136,19 @@ export async function GET() {
       headers: { "Cache-Control": "public, s-maxage=300, stale-while-revalidate=3600" },
     });
   } catch (err) {
-    console.error("[GET /api/products] Supabase error:", err);
-    // Return error instead of silently falling back to hardcoded data
-    return NextResponse.json(
-      { error: "Failed to fetch products from database" },
-      { status: 500 }
-    );
+    console.error("[GET /api/products] Supabase error, serving static fallback:", err);
+    // Fallback to static JSON when Supabase is down
+    try {
+      const staticProducts = require("@/data/products-static.json");
+      return NextResponse.json(staticProducts, {
+        headers: { "Cache-Control": "public, s-maxage=300, stale-while-revalidate=3600" },
+      });
+    } catch {
+      return NextResponse.json(
+        { error: "Failed to fetch products" },
+        { status: 500 }
+      );
+    }
   }
 }
 
