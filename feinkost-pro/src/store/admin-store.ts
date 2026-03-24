@@ -80,22 +80,34 @@ export const useAdminStore = create<AdminState>()(
       // --- Products ---
 
       fetchProducts: async () => {
-        try {
-          const res = await fetch("/api/products");
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          const data = await res.json();
-          // Only update if we got a valid array (not an error object)
-          if (Array.isArray(data)) {
-            set({ products: data, productsLoaded: true });
-          } else {
-            console.error("[fetchProducts] Unexpected response:", data);
-            set({ productsLoaded: true });
-          }
-        } catch (err) {
-          console.error("[fetchProducts] Error:", err);
-          // Keep current products in memory on error — do NOT reset to initialProducts
+        // Show cached products immediately while fetching fresh data
+        const cached = get().products;
+        if (cached.length > 0 && !get().productsLoaded) {
           set({ productsLoaded: true });
         }
+
+        const tryFetch = async (attempt: number): Promise<void> => {
+          try {
+            const res = await fetch("/api/products");
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            if (Array.isArray(data) && data.length > 0) {
+              set({ products: data, productsLoaded: true });
+            } else if (Array.isArray(data)) {
+              set({ productsLoaded: true });
+            }
+          } catch (err) {
+            console.error(`[fetchProducts] Attempt ${attempt} failed:`, err);
+            if (attempt < 3) {
+              await new Promise((r) => setTimeout(r, 2000 * attempt));
+              return tryFetch(attempt + 1);
+            }
+            // After 3 retries, keep cached products
+            set({ productsLoaded: true });
+          }
+        };
+
+        await tryFetch(1);
       },
 
       addProduct: async (product) => {
@@ -283,11 +295,12 @@ export const useAdminStore = create<AdminState>()(
     }),
     {
       name: "feinkost-admin",
-      version: 4,
-      // Only persist auth state - NOT products (those come from Supabase)
+      version: 5,
+      // Persist auth + products cache for instant loading
       partialize: (state) => ({
         isAuthenticated: state.isAuthenticated,
         token: state.token,
+        products: state.products,
       }),
     }
   )
