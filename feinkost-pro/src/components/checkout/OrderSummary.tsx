@@ -25,7 +25,7 @@ export function OrderSummary() {
   const [couponError, setCouponError] = useState("");
   const [couponSuccess, setCouponSuccess] = useState(false);
 
-  const FREE_SHIPPING_THRESHOLD = Number(process.env.NEXT_PUBLIC_FREE_SHIPPING_THRESHOLD) || 49;
+  const FREE_SHIPPING_THRESHOLD = Number(process.env.NEXT_PUBLIC_FREE_SHIPPING_THRESHOLD) || 100;
   const subtotal = totalPrice();
   const shippingCost = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : 5.99;
   const discount = getDiscount(subtotal);

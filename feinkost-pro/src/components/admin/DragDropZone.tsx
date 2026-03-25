@@ -18,35 +18,26 @@ const ACCEPTED_TYPES: Record<string, string[]> = {
   "video/*": [".mp4", ".mov", ".webm"],
 };
 
-function isVideoFile(file: File | string): boolean {
-  if (typeof file === "string") {
-    return file.startsWith("data:video/") || file.match(/\.(mp4|mov|webm)(\?|$)/i) !== null;
-  }
-  return file.type.startsWith("video/");
+function isVideoFile(file: File): boolean {
+  return file.type.startsWith("video/") || /\.(mp4|mov|webm)$/i.test(file.name);
 }
 
 function isVideoUrl(url: string): boolean {
   return url.startsWith("data:video/") || /\.(mp4|mov|webm)(\?|$)/i.test(url);
 }
 
+function isHeicFile(file: File): boolean {
+  return (
+    file.type === "image/heic" ||
+    file.type === "image/heif" ||
+    /\.(heic|heif)$/i.test(file.name)
+  );
+}
+
 export function DragDropZone({ images, onImagesChange }: DragDropZoneProps) {
   const { t } = useLang();
   const [error, setError] = useState<string | null>(null);
-  const [converting, setConverting] = useState(false);
-
-  const convertHeicToJpeg = async (file: File): Promise<File> => {
-    // Dynamic import heic2any only when needed
-    try {
-      const heic2any = (await import("heic2any")).default;
-      const blob = await heic2any({ blob: file, toType: "image/jpeg", quality: 0.85 }) as Blob;
-      return new File([blob], file.name.replace(/\.heic$/i, ".jpg").replace(/\.heif$/i, ".jpg"), {
-        type: "image/jpeg",
-      });
-    } catch {
-      // If conversion fails, return original file
-      return file;
-    }
-  };
+  const [processing, setProcessing] = useState(false);
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
@@ -61,48 +52,43 @@ export function DragDropZone({ images, onImagesChange }: DragDropZoneProps) {
         setError(t("admin.file_too_large"));
       }
 
-      let validFiles = acceptedFiles.filter((f) => {
+      const validFiles = acceptedFiles.filter((f) => {
         const limit = isVideoFile(f) ? MAX_VIDEO_SIZE : MAX_IMAGE_SIZE;
         return f.size <= limit;
       });
 
       if (validFiles.length === 0) return;
 
-      // Convert HEIC/HEIF files to JPEG
-      const heicFiles = validFiles.filter(
-        (f) => f.type === "image/heic" || f.type === "image/heif" ||
-               f.name.toLowerCase().endsWith(".heic") || f.name.toLowerCase().endsWith(".heif")
-      );
+      setProcessing(true);
 
-      if (heicFiles.length > 0) {
-        setConverting(true);
-        const converted = await Promise.all(
-          validFiles.map(async (f) => {
-            if (
-              f.type === "image/heic" || f.type === "image/heif" ||
-              f.name.toLowerCase().endsWith(".heic") || f.name.toLowerCase().endsWith(".heif")
-            ) {
-              return convertHeicToJpeg(f);
+      try {
+        const results: string[] = [];
+
+        for (const file of validFiles) {
+          if (isHeicFile(file)) {
+            // HEIC: Canvas-based conversion (no heavy library needed)
+            try {
+              const dataUrl = await readFileAsDataUrl(file);
+              // Try rendering via browser's native support first
+              const converted = await convertImageViaCanvas(dataUrl, file.name);
+              results.push(converted);
+            } catch {
+              // Fallback: just read as-is, server will handle it
+              const dataUrl = await readFileAsDataUrl(file);
+              results.push(dataUrl);
             }
-            return f;
-          })
-        );
-        validFiles = converted;
-        setConverting(false);
+          } else {
+            const dataUrl = await readFileAsDataUrl(file);
+            results.push(dataUrl);
+          }
+        }
+
+        onImagesChange([...images, ...results]);
+      } catch (e) {
+        setError("Upload failed");
+      } finally {
+        setProcessing(false);
       }
-
-      const readers = validFiles.map(
-        (file) =>
-          new Promise<string>((resolve) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result as string);
-            reader.readAsDataURL(file);
-          })
-      );
-
-      Promise.all(readers).then((dataUrls) => {
-        onImagesChange([...images, ...dataUrls]);
-      });
     },
     [images, onImagesChange, t]
   );
@@ -140,7 +126,7 @@ export function DragDropZone({ images, onImagesChange }: DragDropZoneProps) {
           </div>
           <div>
             <p className="font-medium text-espresso-600">
-              {converting ? t("admin.converting_heic") : isDragActive ? "..." : t("admin.drag_drop")}
+              {processing ? t("admin.converting_heic") : isDragActive ? "..." : t("admin.drag_drop")}
             </p>
             <p className="text-sm text-espresso-400 mt-1">
               {t("admin.drag_drop_sub")}
@@ -167,22 +153,14 @@ export function DragDropZone({ images, onImagesChange }: DragDropZoneProps) {
               className="relative group aspect-square rounded-lg overflow-hidden border border-sand-200 bg-cream-50"
             >
               {isVideoUrl(src) ? (
-                <div className="w-full h-full flex items-center justify-center bg-espresso-700/10">
-                  <video
-                    src={src}
-                    className="w-full h-full object-cover"
-                    muted
-                  />
+                <div className="w-full h-full relative bg-espresso-700/10">
+                  <video src={src} className="w-full h-full object-cover" muted />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <Film className="w-8 h-8 text-white drop-shadow-lg" />
                   </div>
                 </div>
               ) : (
-                <img
-                  src={src}
-                  alt={`Upload ${index + 1}`}
-                  className="w-full h-full object-cover"
-                />
+                <img src={src} alt={`Upload ${index + 1}`} className="w-full h-full object-cover" />
               )}
               <button
                 type="button"
@@ -197,4 +175,31 @@ export function DragDropZone({ images, onImagesChange }: DragDropZoneProps) {
       )}
     </div>
   );
+}
+
+function readFileAsDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function convertImageViaCanvas(dataUrl: string, fileName: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) { reject(new Error("Canvas not supported")); return; }
+      ctx.drawImage(img, 0, 0);
+      const jpeg = canvas.toDataURL("image/jpeg", 0.85);
+      resolve(jpeg);
+    };
+    img.onerror = () => reject(new Error("Failed to load image"));
+    img.src = dataUrl;
+  });
 }

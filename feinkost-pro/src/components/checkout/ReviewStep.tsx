@@ -59,7 +59,7 @@ export function ReviewStep() {
   const [error, setError] = useState<string | null>(null);
   const { t, lang } = useLang();
 
-  const FREE_SHIPPING_THRESHOLD = Number(process.env.NEXT_PUBLIC_FREE_SHIPPING_THRESHOLD) || 49;
+  const FREE_SHIPPING_THRESHOLD = Number(process.env.NEXT_PUBLIC_FREE_SHIPPING_THRESHOLD) || 100;
   const subtotal = totalPrice();
   const shippingCost = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : 5.99;
   const total = subtotal + shippingCost;

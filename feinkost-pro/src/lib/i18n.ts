@@ -65,7 +65,7 @@ export const translations = {
   "nav.home": { de: "Home", tr: "Ana Sayfa", en: "Home" },
 
   // Trust bar
-  "trust.shipping": { de: "Kostenloser Versand ab 49€", tr: "49€ üzeri ücretsiz kargo", en: "Free shipping over €49" },
+  "trust.shipping": { de: "Kostenloser Versand ab 100€", tr: "100€ üzeri ücretsiz kargo", en: "Free shipping over €100" },
   "trust.shipping_desc": { de: "Schnell und sicher zu Ihnen nach Hause", tr: "Hızlı ve güvenli teslimat", en: "Fast and secure delivery to your door" },
   "trust.quality": { de: "Handverlesene Qualität", tr: "Özenle seçilmiş kalite", en: "Hand-picked quality" },
   "trust.quality_desc": { de: "Jedes Produkt sorgfältig ausgewählt", tr: "Her ürün titizlikle seçildi", en: "Every product carefully selected" },
@@ -326,7 +326,7 @@ export const translations = {
   "versand.germany_title": { de: "Lieferung innerhalb Deutschlands", tr: "Almanya içinde teslimat", en: "Delivery within Germany" },
   "versand.germany_time": { de: "Lieferzeit: 3–5 Werktage", tr: "Teslimat süresi: 3–5 iş günü", en: "Delivery time: 3–5 business days" },
   "versand.germany_cost": { de: "Versandkosten: 5,99 €", tr: "Kargo ücreti: 5,99 €", en: "Shipping cost: €5.99" },
-  "versand.germany_free": { de: "Kostenloser Versand ab einem Bestellwert von 49 €", tr: "49 € üzerindeki siparişlerde ücretsiz kargo", en: "Free shipping on orders over €49" },
+  "versand.germany_free": { de: "Kostenloser Versand ab einem Bestellwert von 100 €", tr: "100 € üzerindeki siparişlerde ücretsiz kargo", en: "Free shipping on orders over €100" },
   "versand.austria_title": { de: "Lieferung nach Österreich & Schweiz", tr: "Avusturya & İsviçre'ye teslimat", en: "Delivery to Austria & Switzerland" },
   "versand.austria_time": { de: "Lieferzeit: 5–7 Werktage", tr: "Teslimat süresi: 5–7 iş günü", en: "Delivery time: 5–7 business days" },
   "versand.austria_cost": { de: "Versandkosten: 9,90 €", tr: "Kargo ücreti: 9,90 €", en: "Shipping cost: €9.90" },
@@ -365,7 +365,7 @@ export const translations = {
   "faq.q6": { de: "Bieten Sie Großhandelspreise an?", tr: "Toptan satış fiyatları sunuyor musunuz?", en: "Do you offer wholesale prices?" },
   "faq.a6": { de: "Ja, für Großbestellungen bieten wir Sonderkonditionen an. Bitte kontaktieren Sie uns über das Kontaktformular oder per E-Mail an info@vitanatur.com.", tr: "Evet, toplu siparişler için özel fiyatlar sunuyoruz. Lütfen iletişim formumuz aracılığıyla veya info@vitanatur.com adresine e-posta ile bize ulaşın.", en: "Yes, we offer special rates for bulk orders. Please contact us through the contact form or by email at info@vitanatur.com." },
   "faq.q7": { de: "Ab welchem Bestellwert ist der Versand kostenlos?", tr: "Hangi sipariş tutarından itibaren kargo ücretsiz?", en: "What is the minimum order for free shipping?" },
-  "faq.a7": { de: "Ab einem Bestellwert von 49 € liefern wir innerhalb Deutschlands versandkostenfrei.", tr: "49 € üzerindeki siparişlerde Almanya içinde ücretsiz kargo sunuyoruz.", en: "We offer free shipping within Germany on orders of €49 or more." },
+  "faq.a7": { de: "Ab einem Bestellwert von 100 € liefern wir innerhalb Deutschlands versandkostenfrei.", tr: "100 € üzerindeki siparişlerde Almanya içinde ücretsiz kargo sunuyoruz.", en: "We offer free shipping within Germany on orders of €100 or more." },
   "faq.q8": { de: "Woher stammen Ihre Produkte?", tr: "Ürünleriniz nereden geliyor?", en: "Where do your products come from?" },
   "faq.a8": { de: "Unsere Produkte stammen aus dem gesamten Mittelmeerraum und dem Orient. Jedes Produkt wird sorgfältig ausgewählt und auf Qualität geprüft.", tr: "Ürünlerimiz Akdeniz ve Doğu bölgesinden gelmektedir. Her ürün özenle seçilir ve kalite kontrolünden geçirilir.", en: "Our products come from across the Mediterranean and the Orient. Each product is carefully selected and quality-checked." },
   // Coupons
@@ -547,7 +547,7 @@ export const translations = {
   "agb.s3_p3": { de: "Die Zahlung wird über den Zahlungsdienstleister Stripe abgewickelt. Die Belastung erfolgt zum Zeitpunkt der Bestellung.", tr: "Ödeme, Stripe ödeme hizmet sağlayıcısı aracılığıyla işlenir. Ücretlendirme sipariş anında yapılır.", en: "Payment is processed through the payment service provider Stripe. The charge is made at the time of the order." },
   "agb.s4_title": { de: "§ 4 Lieferung und Versandkosten", tr: "§ 4 Teslimat ve Kargo Ücretleri", en: "§ 4 Delivery and Shipping Costs" },
   "agb.s4_p1": { de: "Wir liefern innerhalb Deutschlands, nach Österreich und in die Schweiz.", tr: "Almanya, Avusturya ve İsviçre'ye teslimat yapıyoruz.", en: "We deliver within Germany, to Austria, and to Switzerland." },
-  "agb.s4_shipping_de": { de: "Versandkosten Deutschland: 5,99 \u20ac (kostenloser Versand ab 49,00 \u20ac Bestellwert)", tr: "Almanya kargo ücreti: 5,99 \u20ac (49,00 \u20ac ve üzeri siparişlerde ücretsiz kargo)", en: "Shipping costs Germany: \u20ac5.99 (free shipping for orders over \u20ac49.00)" },
+  "agb.s4_shipping_de": { de: "Versandkosten Deutschland: 5,99 \u20ac (kostenloser Versand ab 100,00 \u20ac Bestellwert)", tr: "Almanya kargo ücreti: 5,99 \u20ac (100,00 \u20ac ve üzeri siparişlerde ücretsiz kargo)", en: "Shipping costs Germany: \u20ac5.99 (free shipping for orders over \u20ac100.00)" },
   "agb.s4_shipping_at": { de: "Versandkosten Österreich: 6,90 \u20ac", tr: "Avusturya kargo ücreti: 6,90 \u20ac", en: "Shipping costs Austria: \u20ac6.90" },
   "agb.s4_shipping_ch": { de: "Versandkosten Schweiz: 9,90 \u20ac", tr: "İsviçre kargo ücreti: 9,90 \u20ac", en: "Shipping costs Switzerland: \u20ac9.90" },
   "agb.s4_delivery_time": { de: "Die Lieferzeit beträgt in der Regel:", tr: "Tahmini teslimat süresi:", en: "The usual delivery time is:" },

@@ -1,24 +1,37 @@
 import { Product } from "@/types";
 
-/**
- * Fuzzy match with Turkish character support.
- * Normalizes İ/I for proper Turkish locale matching.
- */
-export function fuzzyMatch(text: string, query: string): boolean {
-  const normalizedText = text
+// Turkish + German character normalization map
+const CHAR_MAP: Record<string, string> = {
+  ı: "i", İ: "i", ö: "o", Ö: "o", ü: "u", Ü: "u",
+  ç: "c", Ç: "c", ş: "s", Ş: "s", ğ: "g", Ğ: "g",
+  ä: "a", Ä: "a", ß: "ss",
+};
+
+function normalize(text: string): string {
+  return text
     .toLowerCase()
-    .replace(/İ/g, "i")
-    .replace(/I/g, "ı");
-  const normalizedQuery = query
-    .toLowerCase()
-    .replace(/İ/g, "i")
-    .replace(/I/g, "ı");
-  return normalizedText.includes(normalizedQuery);
+    .replace(/[ıİöÖüÜçÇşŞğĞäÄß]/g, (ch) => CHAR_MAP[ch] || ch);
 }
 
 /**
- * Search products by name, description, and category.
- * Respects the current language for name/description matching.
+ * Fuzzy match with Turkish + German character support.
+ * "fındık" matches "findik", "salça" matches "salca", etc.
+ */
+export function fuzzyMatch(text: string, query: string): boolean {
+  const normText = normalize(text);
+  const normQuery = normalize(query);
+
+  // Direct substring match
+  if (normText.includes(normQuery)) return true;
+
+  // Also try original lowercase (for exact matches like "Nüsse")
+  if (text.toLowerCase().includes(query.toLowerCase())) return true;
+
+  return false;
+}
+
+/**
+ * Search products by name (DE + TR + EN), description, and category.
  */
 export function searchProducts(
   products: Product[],
@@ -26,14 +39,23 @@ export function searchProducts(
   lang: string
 ): Product[] {
   if (!query.trim()) return [];
+
+  const q = query.trim();
+
   return products.filter((p) => {
-    const name = lang === "tr" && p.nameTr ? p.nameTr : p.name;
-    const desc =
-      lang === "tr" && p.descriptionTr ? p.descriptionTr : p.description;
-    return (
-      fuzzyMatch(name, query) ||
-      fuzzyMatch(desc, query) ||
-      fuzzyMatch(p.category, query)
-    );
+    // Search in ALL languages, not just current
+    const fields = [
+      p.name,
+      p.nameTr,
+      p.nameEn,
+      p.description,
+      p.descriptionTr,
+      p.descriptionEn,
+      p.category,
+      p.origin,
+      p.originTr,
+    ].filter(Boolean) as string[];
+
+    return fields.some((field) => fuzzyMatch(field, q));
   });
 }
