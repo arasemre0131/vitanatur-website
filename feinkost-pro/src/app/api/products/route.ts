@@ -3,6 +3,45 @@ import { supabaseAdmin } from "@/lib/supabase";
 import { validateSession } from "@/lib/auth";
 import { Product } from "@/types";
 
+// --- Upload data URI to Supabase Storage ---
+async function uploadDataUriToStorage(
+  supabase: NonNullable<typeof supabaseAdmin>,
+  productId: string,
+  dataUri: string,
+  index: number
+): Promise<string> {
+  try {
+    const match = dataUri.match(/^data:(image|video)\/(\w+);base64,(.+)$/);
+    if (!match) return dataUri;
+
+    const mediaType = match[1];
+    const ext = match[2] === "jpeg" ? "jpg" : match[2];
+    const base64 = match[3];
+    const buffer = Buffer.from(base64, "base64");
+    const fileName = `${productId}/${Date.now()}-${index}.${ext}`;
+
+    const { error } = await supabase.storage
+      .from("product-images")
+      .upload(fileName, buffer, {
+        contentType: `${mediaType}/${match[2]}`,
+        upsert: true,
+      });
+
+    if (error) {
+      console.error("[upload] Storage error:", error.message);
+      return dataUri; // fallback to data URI if upload fails
+    }
+
+    const { data } = supabase.storage
+      .from("product-images")
+      .getPublicUrl(fileName);
+
+    return data.publicUrl;
+  } catch {
+    return dataUri;
+  }
+}
+
 // --- Supabase row types (snake_case) ---
 
 interface ProductRow {
@@ -206,12 +245,21 @@ export async function POST(request: Request) {
       if (variantError) throw variantError;
     }
 
-    // Insert images
+    // Insert images — convert data URIs to Storage URLs first
     if (body.images.length > 0) {
+      const imageUrls = await Promise.all(
+        body.images.map(async (url, idx) => {
+          if (url.startsWith("data:")) {
+            return await uploadDataUriToStorage(supabaseAdmin!, body.id, url, idx);
+          }
+          return url;
+        })
+      );
+
       const { error: imageError } = await supabaseAdmin
         .from("product_images")
         .insert(
-          body.images.map((url, idx) => ({
+          imageUrls.map((url, idx) => ({
             product_id: body.id,
             url,
             sort_order: idx,

@@ -77,7 +77,7 @@ export function Header() {
           {/* Logo — always visible */}
           <Link href="/" className="flex items-center">
             <img
-              src="/images/vitanatur-logo-transparent.png"
+              src="/images/logo.png"
               alt="Vitanatur"
               className="h-16 w-16 lg:h-20 lg:w-20 rounded-full object-contain"
               fetchPriority="high"

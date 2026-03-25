@@ -3,6 +3,29 @@ import { supabaseAdmin } from "@/lib/supabase";
 import { validateSession } from "@/lib/auth";
 import { Product } from "@/types";
 
+async function uploadDataUriToStorage(
+  supabase: NonNullable<typeof supabaseAdmin>,
+  productId: string,
+  dataUri: string,
+  index: number
+): Promise<string> {
+  try {
+    const match = dataUri.match(/^data:(image|video)\/(\w+);base64,(.+)$/);
+    if (!match) return dataUri;
+    const ext = match[2] === "jpeg" ? "jpg" : match[2];
+    const buffer = Buffer.from(match[3], "base64");
+    const fileName = `${productId}/${Date.now()}-${index}.${ext}`;
+    const { error } = await supabase.storage
+      .from("product-images")
+      .upload(fileName, buffer, { contentType: `${match[1]}/${match[2]}`, upsert: true });
+    if (error) return dataUri;
+    const { data } = supabase.storage.from("product-images").getPublicUrl(fileName);
+    return data.publicUrl;
+  } catch {
+    return dataUri;
+  }
+}
+
 /**
  * PATCH /api/products/[id]
  * Update a single product. Requires admin auth.
@@ -93,12 +116,20 @@ export async function PATCH(
         .delete()
         .eq("product_id", id);
 
-      // Insert new images
+      // Insert new images — upload data URIs to Storage first
       if (body.images.length > 0) {
+        const imageUrls = await Promise.all(
+          body.images.map(async (url, idx) => {
+            if (url.startsWith("data:")) {
+              return await uploadDataUriToStorage(supabaseAdmin!, id, url, idx);
+            }
+            return url;
+          })
+        );
         const { error } = await supabaseAdmin
           .from("product_images")
           .insert(
-            body.images.map((url, idx) => ({
+            imageUrls.map((url, idx) => ({
               product_id: id,
               url,
               sort_order: idx,

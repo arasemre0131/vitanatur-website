@@ -34,7 +34,7 @@ export function Footer() {
           <div className="sm:col-span-2 lg:col-span-1">
             <Link href="/" className="inline-flex items-center gap-2 mb-4">
               <img
-                src="/images/vitanatur-logo-transparent.png"
+                src="/images/logo.png"
                 alt="Vitanatur"
                 className="h-12 w-12 rounded-full object-cover"
               />
