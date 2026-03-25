@@ -431,46 +431,10 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
               {t("admin.images")}
             </h3>
 
-            {/* Current images */}
-            {images.length > 0 && (
-              <div>
-                <p className="text-xs font-medium text-espresso-500 mb-2">
-                  {t("admin.current_images")}
-                </p>
-                <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
-                  {images.map((src, idx) => (
-                    <div
-                      key={idx}
-                      className="relative group aspect-square rounded-lg overflow-hidden border border-sand-200 bg-cream-50"
-                    >
-                      <img
-                        src={src}
-                        alt={`Görsel ${idx + 1}`}
-                        className="w-full h-full object-cover"
-                      />
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setImages((prev) =>
-                            prev.filter((_, i) => i !== idx)
-                          )
-                        }
-                        className="absolute top-1 right-1 w-5 h-5 rounded-full bg-espresso-700/70 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-brick-600"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Drop zone for new images */}
+            {/* Drop zone — shows existing images + handles new uploads */}
             <DragDropZone
-              images={[]}
-              onImagesChange={(newImages) =>
-                setImages((prev) => [...prev, ...newImages])
-              }
+              images={images}
+              onImagesChange={setImages}
             />
           </section>
 
