@@ -28,7 +28,7 @@ import {
 import { fetchProductsServer } from "@/lib/fetch-products-server";
 import { ProductHydrator } from "@/components/ProductHydrator";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://vitanatur.de";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://vitanatur.shop";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -47,21 +47,28 @@ export const metadata: Metadata = {
   keywords: [
     "Vitanatur",
     "türkische Feinkost",
+    "türkische Lebensmittel online kaufen",
+    "türkische Gewürze kaufen",
+    "orientalische Lebensmittel bestellen",
     "mediterrane Delikatessen",
-    "türkische Gewürze",
+    "türkischer Kaffee bestellen",
     "Trockenfrüchte",
-    "Olivenöl",
-    "Baklava",
-    "orientalische Lebensmittel",
-    "Sumak",
-    "Pistazien",
-    "Medjool Datteln",
-    "türkischer Kaffee",
-    "Tahini",
+    "Olivenöl türkisch",
+    "Medjool Datteln kaufen",
+    "Sumak Gewürz",
+    "Pistazien Antep",
+    "Tahini kaufen",
     "Nüsse online kaufen",
+    "Pekmez kaufen",
+    "Tarhana kaufen",
     "Kaşar Käse",
-    "türkische Spezialitäten",
-    "Vitanatur online Shop",
+    "türkische Spezialitäten Deutschland",
+    "Zühre Ana Produkte",
+    "Biber Salçası",
+    "Haselnüsse Giresun",
+    "orientalischer Online Shop",
+    "türkische Lebensmittel Hilden",
+    "Vitanatur Shop",
   ],
   openGraph: {
     title: "Vitanatur — Türkische & Mediterrane Feinkost Online",

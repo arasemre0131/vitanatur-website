@@ -3,8 +3,8 @@ import { products } from "@/data/products";
 import { categories } from "@/data/categories";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://vitanatur.de";
-  const lastMod = new Date("2026-03-17");
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://vitanatur.shop";
+  const lastMod = new Date();
 
   /* ── Static pages ── */
   const staticPages: MetadataRoute.Sitemap = [

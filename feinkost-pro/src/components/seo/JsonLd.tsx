@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { Product } from "@/types";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://vitanatur.de";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://vitanatur.shop";
 
 function useJsonLd(id: string, schema: Record<string, unknown>) {
   useEffect(() => {

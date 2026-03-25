@@ -1,13 +1,15 @@
 import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://vitanatur.de";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://vitanatur.shop";
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-      disallow: ["/admin/", "/checkout/", "/api/"],
-    },
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/admin/", "/checkout/", "/api/"],
+      },
+    ],
     sitemap: `${baseUrl}/sitemap.xml`,
   };
 }

@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://vitanatur.de";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://vitanatur.shop";
 
 interface OGProps {
   title: string;
