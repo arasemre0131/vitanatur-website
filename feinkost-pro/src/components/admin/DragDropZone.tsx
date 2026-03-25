@@ -13,18 +13,12 @@ interface DragDropZoneProps {
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
 
-const ACCEPTED_TYPES: Record<string, string[]> = {
-  "image/jpeg": [".jpg", ".jpeg"],
-  "image/png": [".png"],
-  "image/webp": [".webp"],
-  "image/gif": [".gif"],
-  "image/heic": [".heic"],
-  "image/heif": [".heif"],
-  "application/octet-stream": [".heic", ".heif"],
-  "video/mp4": [".mp4"],
-  "video/quicktime": [".mov"],
-  "video/webm": [".webm"],
-};
+// NO accept filter — iOS sends HEIC with empty/wrong MIME type
+// Validation happens server-side in /api/upload
+const ALLOWED_EXTENSIONS = new Set([
+  "jpg", "jpeg", "png", "webp", "gif", "heic", "heif",
+  "mp4", "mov", "webm",
+]);
 
 function isVideoUrl(url: string): boolean {
   return /\.(mp4|mov|webm)(\?|$)/i.test(url) || url.includes("/videos/");
@@ -140,9 +134,23 @@ export function DragDropZone({ images, onImagesChange }: DragDropZoneProps) {
     onImagesChange(images.filter((_, i) => i !== index));
   };
 
+  const handleDrop = useCallback(
+    (accepted: File[]) => {
+      // Filter by extension since MIME types are unreliable (iOS HEIC)
+      const valid = accepted.filter((f) => {
+        const ext = f.name.split(".").pop()?.toLowerCase() || "";
+        return ALLOWED_EXTENSIONS.has(ext);
+      });
+      if (valid.length < accepted.length) {
+        setError("Desteklenmeyen dosya formatı");
+      }
+      if (valid.length > 0) onDrop(valid);
+    },
+    [onDrop]
+  );
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: ACCEPTED_TYPES,
+    onDrop: handleDrop,
     multiple: true,
     maxSize: MAX_FILE_SIZE,
   });
