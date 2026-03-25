@@ -2,7 +2,8 @@
 
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { Upload, X, AlertCircle, Film } from "lucide-react";
+import { Upload, X, AlertCircle, Film, Loader2 } from "lucide-react";
+import { useAdminStore } from "@/store/admin-store";
 import { useLang } from "@/lib/i18n";
 
 interface DragDropZoneProps {
@@ -10,87 +11,129 @@ interface DragDropZoneProps {
   onImagesChange: (images: string[]) => void;
 }
 
-const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
-const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50MB
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
 
 const ACCEPTED_TYPES: Record<string, string[]> = {
-  "image/*": [".jpg", ".jpeg", ".png", ".webp", ".gif", ".heic", ".heif"],
-  "video/*": [".mp4", ".mov", ".webm"],
+  "image/jpeg": [".jpg", ".jpeg"],
+  "image/png": [".png"],
+  "image/webp": [".webp"],
+  "image/gif": [".gif"],
+  "image/heic": [".heic"],
+  "image/heif": [".heif"],
+  "application/octet-stream": [".heic", ".heif"],
+  "video/mp4": [".mp4"],
+  "video/quicktime": [".mov"],
+  "video/webm": [".webm"],
 };
 
-function isVideoFile(file: File): boolean {
-  return file.type.startsWith("video/") || /\.(mp4|mov|webm)$/i.test(file.name);
-}
-
 function isVideoUrl(url: string): boolean {
-  return url.startsWith("data:video/") || /\.(mp4|mov|webm)(\?|$)/i.test(url);
+  return /\.(mp4|mov|webm)(\?|$)/i.test(url) || url.includes("/videos/");
 }
 
-function isHeicFile(file: File): boolean {
-  return (
-    file.type === "image/heic" ||
-    file.type === "image/heif" ||
-    /\.(heic|heif)$/i.test(file.name)
-  );
+interface UploadingItem {
+  name: string;
+  progress: number;
+  status: "uploading" | "done" | "error";
+  error?: string;
 }
 
 export function DragDropZone({ images, onImagesChange }: DragDropZoneProps) {
   const { t } = useLang();
+  const token = useAdminStore((s) => s.token);
   const [error, setError] = useState<string | null>(null);
-  const [processing, setProcessing] = useState(false);
+  const [uploading, setUploading] = useState<UploadingItem[]>([]);
+
+  const uploadFile = useCallback(
+    async (file: File): Promise<string | null> => {
+      const item: UploadingItem = { name: file.name, progress: 0, status: "uploading" };
+      setUploading((prev) => [...prev, item]);
+
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        // Use XMLHttpRequest for progress tracking
+        const result = await new Promise<string>((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+
+          xhr.upload.onprogress = (e) => {
+            if (e.lengthComputable) {
+              const pct = Math.round((e.loaded / e.total) * 100);
+              setUploading((prev) =>
+                prev.map((u) => (u.name === file.name ? { ...u, progress: pct } : u))
+              );
+            }
+          };
+
+          xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              const data = JSON.parse(xhr.responseText);
+              if (data.url) {
+                resolve(data.url);
+              } else {
+                reject(new Error(data.error || "No URL returned"));
+              }
+            } else {
+              try {
+                const errData = JSON.parse(xhr.responseText);
+                reject(new Error(errData.error || `HTTP ${xhr.status}`));
+              } catch {
+                reject(new Error(`HTTP ${xhr.status}`));
+              }
+            }
+          };
+
+          xhr.onerror = () => reject(new Error("Network error"));
+          xhr.open("POST", "/api/upload");
+          xhr.setRequestHeader("Authorization", `Bearer ${token}`);
+          xhr.send(formData);
+        });
+
+        setUploading((prev) =>
+          prev.map((u) => (u.name === file.name ? { ...u, progress: 100, status: "done" } : u))
+        );
+
+        // Clear from uploading list after 1s
+        setTimeout(() => {
+          setUploading((prev) => prev.filter((u) => u.name !== file.name));
+        }, 1000);
+
+        return result;
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : "Upload failed";
+        setUploading((prev) =>
+          prev.map((u) => (u.name === file.name ? { ...u, status: "error", error: msg } : u))
+        );
+        setTimeout(() => {
+          setUploading((prev) => prev.filter((u) => u.name !== file.name));
+        }, 3000);
+        return null;
+      }
+    },
+    [token]
+  );
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
       setError(null);
 
-      const oversized = acceptedFiles.filter((f) => {
-        const limit = isVideoFile(f) ? MAX_VIDEO_SIZE : MAX_IMAGE_SIZE;
-        return f.size > limit;
-      });
-
+      const oversized = acceptedFiles.filter((f) => f.size > MAX_FILE_SIZE);
       if (oversized.length > 0) {
         setError(t("admin.file_too_large"));
       }
 
-      const validFiles = acceptedFiles.filter((f) => {
-        const limit = isVideoFile(f) ? MAX_VIDEO_SIZE : MAX_IMAGE_SIZE;
-        return f.size <= limit;
-      });
-
+      const validFiles = acceptedFiles.filter((f) => f.size <= MAX_FILE_SIZE);
       if (validFiles.length === 0) return;
 
-      setProcessing(true);
+      // Upload all files in parallel
+      const urls = await Promise.all(validFiles.map(uploadFile));
+      const successUrls = urls.filter(Boolean) as string[];
 
-      try {
-        const results: string[] = [];
-
-        for (const file of validFiles) {
-          if (isHeicFile(file)) {
-            // HEIC: Canvas-based conversion (no heavy library needed)
-            try {
-              const dataUrl = await readFileAsDataUrl(file);
-              // Try rendering via browser's native support first
-              const converted = await convertImageViaCanvas(dataUrl, file.name);
-              results.push(converted);
-            } catch {
-              // Fallback: just read as-is, server will handle it
-              const dataUrl = await readFileAsDataUrl(file);
-              results.push(dataUrl);
-            }
-          } else {
-            const dataUrl = await readFileAsDataUrl(file);
-            results.push(dataUrl);
-          }
-        }
-
-        onImagesChange([...images, ...results]);
-      } catch (e) {
-        setError("Upload failed");
-      } finally {
-        setProcessing(false);
+      if (successUrls.length > 0) {
+        onImagesChange([...images, ...successUrls]);
       }
     },
-    [images, onImagesChange, t]
+    [images, onImagesChange, uploadFile, t]
   );
 
   const removeImage = (index: number) => {
@@ -101,7 +144,10 @@ export function DragDropZone({ images, onImagesChange }: DragDropZoneProps) {
     onDrop,
     accept: ACCEPTED_TYPES,
     multiple: true,
+    maxSize: MAX_FILE_SIZE,
   });
+
+  const isUploading = uploading.some((u) => u.status === "uploading");
 
   return (
     <div className="space-y-4">
@@ -111,6 +157,8 @@ export function DragDropZone({ images, onImagesChange }: DragDropZoneProps) {
           "relative border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-200",
           isDragActive
             ? "border-olive-500 bg-olive-100/50"
+            : isUploading
+            ? "border-amber-400 bg-amber-50/30"
             : "border-sand-300 bg-sand-100/50 hover:border-olive-400 hover:bg-sand-100",
         ].join(" ")}
       >
@@ -119,25 +167,58 @@ export function DragDropZone({ images, onImagesChange }: DragDropZoneProps) {
           <div
             className={[
               "w-14 h-14 rounded-full flex items-center justify-center transition-colors",
-              isDragActive ? "bg-olive-200 text-olive-700" : "bg-sand-200 text-espresso-400",
+              isUploading
+                ? "bg-amber-100 text-amber-600"
+                : isDragActive
+                ? "bg-olive-200 text-olive-700"
+                : "bg-sand-200 text-espresso-400",
             ].join(" ")}
           >
-            <Upload className="w-6 h-6" />
+            {isUploading ? (
+              <Loader2 className="w-6 h-6 animate-spin" />
+            ) : (
+              <Upload className="w-6 h-6" />
+            )}
           </div>
           <div>
             <p className="font-medium text-espresso-600">
-              {processing ? t("admin.converting_heic") : isDragActive ? "..." : t("admin.drag_drop")}
+              {isUploading
+                ? `${uploading.filter((u) => u.status === "uploading").length} dosya yükleniyor...`
+                : isDragActive
+                ? "Bırak — yüklenecek"
+                : t("admin.drag_drop")}
             </p>
-            <p className="text-sm text-espresso-400 mt-1">
-              {t("admin.drag_drop_sub")}
-            </p>
+            <p className="text-sm text-espresso-400 mt-1">{t("admin.drag_drop_sub")}</p>
           </div>
-          <p className="text-xs text-espresso-400/70">
-            {t("admin.drag_drop_limit_v2")}
-          </p>
+          <p className="text-xs text-espresso-400/70">{t("admin.drag_drop_limit_v2")}</p>
         </div>
       </div>
 
+      {/* Upload progress */}
+      {uploading.length > 0 && (
+        <div className="space-y-2">
+          {uploading.map((u, i) => (
+            <div key={i} className="flex items-center gap-3 text-sm">
+              <div className="flex-1 min-w-0">
+                <p className="text-espresso-600 truncate">{u.name}</p>
+                <div className="mt-1 h-1.5 bg-sand-200 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all duration-300 ${
+                      u.status === "error" ? "bg-brick-500" : u.status === "done" ? "bg-olive-500" : "bg-amber-400"
+                    }`}
+                    style={{ width: `${u.progress}%` }}
+                  />
+                </div>
+              </div>
+              <span className={`text-xs font-medium ${u.status === "error" ? "text-brick-500" : "text-espresso-400"}`}>
+                {u.status === "error" ? u.error : u.status === "done" ? "✓" : `${u.progress}%`}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Error */}
       {error && (
         <div className="flex items-center gap-2 text-brick-600 text-sm bg-brick-300/10 rounded-lg px-3 py-2">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
@@ -145,6 +226,7 @@ export function DragDropZone({ images, onImagesChange }: DragDropZoneProps) {
         </div>
       )}
 
+      {/* Preview grid */}
       {images.length > 0 && (
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
           {images.map((src, index) => (
@@ -154,7 +236,7 @@ export function DragDropZone({ images, onImagesChange }: DragDropZoneProps) {
             >
               {isVideoUrl(src) ? (
                 <div className="w-full h-full relative bg-espresso-700/10">
-                  <video src={src} className="w-full h-full object-cover" muted />
+                  <video src={src} className="w-full h-full object-cover" muted preload="metadata" />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <Film className="w-8 h-8 text-white drop-shadow-lg" />
                   </div>
@@ -175,31 +257,4 @@ export function DragDropZone({ images, onImagesChange }: DragDropZoneProps) {
       )}
     </div>
   );
-}
-
-function readFileAsDataUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-async function convertImageViaCanvas(dataUrl: string, fileName: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) { reject(new Error("Canvas not supported")); return; }
-      ctx.drawImage(img, 0, 0);
-      const jpeg = canvas.toDataURL("image/jpeg", 0.85);
-      resolve(jpeg);
-    };
-    img.onerror = () => reject(new Error("Failed to load image"));
-    img.src = dataUrl;
-  });
 }

@@ -102,16 +102,30 @@ export function ImageCarousel({
         className="flex h-full transition-transform duration-300 ease-out"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
-        {images.map((src, i) => (
-          <img
-            key={i}
-            src={src}
-            alt={`${alt} ${i + 1}`}
-            className="w-full h-full object-cover flex-shrink-0"
-            draggable={false}
-            loading={i === 0 ? "eager" : "lazy"}
-          />
-        ))}
+        {images.map((src, i) => {
+          const isVideo = /\.(mp4|mov|webm)(\?|$)/i.test(src) || src.includes("/videos/");
+          return isVideo ? (
+            <video
+              key={i}
+              src={src}
+              className="w-full h-full object-cover flex-shrink-0"
+              controls
+              muted
+              playsInline
+              preload={i === 0 ? "metadata" : "none"}
+              draggable={false}
+            />
+          ) : (
+            <img
+              key={i}
+              src={src}
+              alt={`${alt} ${i + 1}`}
+              className="w-full h-full object-cover flex-shrink-0"
+              draggable={false}
+              loading={i === 0 ? "eager" : "lazy"}
+            />
+          );
+        })}
       </div>
 
       {/* Left arrow */}

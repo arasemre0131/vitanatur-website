@@ -8,6 +8,11 @@ const nextConfig = {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 3600,
   },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "50mb",
+    },
+  },
 };
 
 module.exports = nextConfig;
