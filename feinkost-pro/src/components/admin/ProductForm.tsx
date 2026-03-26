@@ -114,6 +114,13 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
       lowStockThreshold: thresholdNum,
     };
 
+    // Filter out any broken/empty image URLs
+    productData.images = productData.images.filter(
+      (url) => url && url.startsWith("http")
+    );
+
+    console.log("[ProductForm] Saving with images:", productData.images);
+
     if (isCreateMode) {
       addProduct({
         id: `new-${Date.now()}`,
